@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OngProject</name>
+    </assembly>
+    <members>
+        <member name="M:OngProject.Controllers.ActivitiesController.GetAll">
+            <summary>
+            Endpoint para obtener todas las entradas de Activities. Se debe ser ADMINISTRADOR
+            </summary>
+            <response code="200">Solicitud concretada con exito</response>
+            <response code="401">Credenciales no validas</response> 
+        </member>
+        <member name="M:OngProject.Controllers.ActivitiesController.Get(System.Int32)">
+            <summary>
+            Endpoint para obtener una activity por id. Se debe ser ADMINISTRADOR
+            </summary>
+            <response code="200">Solicitud concretada con exito</response>
+            <response code="401">Credenciales no validas</response> 
+        </member>
+        <member name="M:OngProject.Controllers.CommentsController.Delete(System.Int32)">
+            <summary>
+            Endpoint para eliminacion de baja logica de un Comentario. Se debe ser ADMINISTRADOR o USUARIO
+            </summary>
+            <remarks>
+            <para>
+            Formato de solicitud: https:// nombreDelServidor /comments ?id=miembroAborrar
+            </para>
+            <para>
+            Ejemplo de solicitud: https://localhost:44353/comments?id=1
+            </para>
+            </remarks>
+            <param name="id">Id del comentario a borrarse, se recibe por solicitud</param>
+            <returns>
+            
+            </returns>
+            <response code="200">Se ha eliminado al comentario correctamente</response>
+            <response code="401">Credenciales invalidas</response> 
+        </member>
+        <member name="M:OngProject.Controllers.ContactsController.Get(System.Int32)">
+            <summary>
+            Endpoint para obtener un contact por id. Se debe ser ADMINISTRADOR
+            </summary>
+            <response code="200">Solicitud concretada con exito</response>
+            <response code="401">Credenciales no validas</response> 
+        </member>
+        <member name="P:OngProject.Core.DTOs.MemberInsertDTO.Name">
+            <summary>
+            Requerido: Nombre del nuevo miembro
+            </summary>
+        </member>
+        <member name="P:OngProject.Core.DTOs.MemberInsertDTO.FacebookUrl">
+            <summary>
+            Url del Facebook del nuevo miembro
+            </summary>
+        </member>
+        <member name="P:OngProject.Core.DTOs.MemberInsertDTO.InstagramUrl">
+            <summary>
+            Url del Instagram del nuevo miembro
+            </summary>
+        </member>
+        <member name="P:OngProject.Core.DTOs.MemberInsertDTO.LinkedinUrl">
+            <summary>
+            Url del Linkdn del nuevo miembro
+            </summary>
+        </member>
+        <member name="P:OngProject.Core.DTOs.MemberInsertDTO.Image">
+            <summary>
+            Imagen del nuevo miembro. Solo se aceptan formatos:
+            .jpg , .jpng , .png
+            </summary>
+        </member>
+        <member name="P:OngProject.Core.DTOs.MemberInsertDTO.Description">
+            <summary>
+            Descripcion del nuevo miembro
+            </summary>
+        </member>
+        <member name="P:OngProject.Core.DTOs.MemberUpdateDTO.Id">
+            <summary>
+            Id del usuario a modificar
+            </summary>
+        </member>
+        <member name="P:OngProject.Core.DTOs.MemberUpdateDTO.Name">
+            <summary>
+            Nombre a modificar
+            </summary>
+        </member>
+        <member name="P:OngProject.Core.DTOs.MemberUpdateDTO.FacebookUrl">
+            <summary>
+            Url de Facebook a modificar
+            </summary>
+        </member>
+        <member name="P:OngProject.Core.DTOs.MemberUpdateDTO.InstagramUrl">
+            <summary>
+            Url de Instagram a modificar
+            </summary>
+        </member>
+        <member name="P:OngProject.Core.DTOs.MemberUpdateDTO.LinkedinUrl">
+            <summary>
+            Url de LinkedIn a modificar
+            </summary>
+        </member>
+        <member name="P:OngProject.Core.DTOs.MemberUpdateDTO.Image">
+            <summary>
+            Imagen a modificar del miembro. Solo se aceptan formatos:
+            <br></br>
+            .jpg , .jpng , .png
+            </summary>
+        </member>
+        <member name="P:OngProject.Core.DTOs.MemberUpdateDTO.Description">
+            <summary>
+            Descripcion del miembro a modificar
+            </summary>
+        </member>
+        <member name="P:OngProject.Core.Entities.EntityBase.IsDeleted">
+            <summary>
+            IsDeleted para borrado de baja logica, donde: 
+            true = borrado
+            false = Activo
+            </summary> 
+        </member>
+        <member name="P:OngProject.Core.Entities.EntityBase.CreatedAt">
+            <summary>
+            Para indicar fechas de modificaciones en al Db. 
+            </summary> 
+        </member>
+        <member name="P:OngProject.Core.Helper.Pagination.PaginationDTO`1.CurrentPage">
+            <summary>
+            Pagina que se esta visualizando
+            </summary>
+        </member>
+        <member name="P:OngProject.Core.Helper.Pagination.PaginationDTO`1.TotalItems">
+            <summary>
+            Numero total de entradas que hay en la Db
+            </summary>
+        </member>
+        <member name="P:OngProject.Core.Helper.Pagination.PaginationDTO`1.TotalPages">
+            <summary>
+            Numero total de paginas en Db. Cambia con respecto a la cantidad de 
+            elementos por pagina que se piden (por default, =10)
+            </summary>
+        </member>
+        <member name="P:OngProject.Core.Helper.Pagination.PaginationDTO`1.PrevPage">
+            <summary>
+            Url con la pagina previa
+            </summary>
+        </member>
+        <member name="P:OngProject.Core.Helper.Pagination.PaginationDTO`1.NextPage">
+            <summary>
+            Url con la pagina siguiente
+            </summary>
+        </member>
+        <member name="P:OngProject.Core.Helper.Pagination.PaginationDTO`1.Items">
+            <summary>
+            Lista de elementos por pagina
+            </summary>
+        </member>
+        <member name="M:OngProject.Infrastructure.Repositories.BaseRepository`1.EntityExists(System.Int32)">
+            <summary>
+            Si la entidad existe y no ha sido borrada regresa un bool. 
+            Si no esta registrado el Id, o ha sido borrada con baja logica, regresa null.
+            </summary>
+            <param name="id"></param>
+            <returns></returns> 
+        </member>
+        <member name="M:OngProject.Infrastructure.Repositories.BaseRepository`1.FindByCondition(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+            <summary>
+            Metodo para realizar una busqueda por medio de una expresion LINQ
+            </summary>
+            <remarks>
+            <para>Ejemplo:
+            var request= _unitOfWork.(repositorioDeLaEntidad).FindByCondition(x=> x.campo del objeto de la Db == Campo contra el que quiero comparar);</para>
+            <para>Cuando se quiere agregar una entidad ligada por una FK, se debe de incluir despues de la frase, con una coma</para>
+            <para>Ejemplo: .FindByCondition(query LINQ, y=> y.EntidadVinculadaPorunaFK)</para>
+            <para> Ejemplo concreto:
+            var request= _unitOfWork.UsersRepository.FindByCondition(x=> x.Email == email, y=> y.Role);</para>
+            <para> Esto me va a traer un IEnumerable de User, y en el campo Role va a traer el Rol asignado a ese Usuario.
+            De ahi solamente restaria aplicar logica para hacerlo lista, o para lo que necesiten</para>
+            
+            </remarks>
+            <returns>
+            IEnumerable de la entidad que se este ocupando, filtrada. Pueden agregarse mas propiedades. 
+            Por defecto trae solo las que IsDeleted==false
+            </returns> 
+        </member>
+    </members>
+</doc>
