@@ -97,11 +97,21 @@ namespace OngProject.Core.Mapper
                 Address = organization.Address
             };
         }
+        public OrganizationsGetDTO FromOrganizationToOrganizationGetDto(Organizations organization)
+        {
+            return new OrganizationsGetDTO
+            {
+                Name = organization.Name,
+                Image = organization.Image,
+                Phone = organization.Phone,
+                Address = organization.Address
+            };
+        }
         #endregion
 
         #region User Mappers
 
-        
+
 
         #endregion
 
