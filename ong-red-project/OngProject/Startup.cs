@@ -67,26 +67,7 @@ namespace OngProject
             });
 
             // JWT Token Generator
-            /*
-            var key = Encoding.ASCII.GetBytes(Configuration["JWT:Secret"]);
-            services
-            .AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateAudience = false,
-                    ValidateIssuerSigningKey = true,
-                    ValidateIssuer = false
-                };
-            });*/
+           
 
             //AWS S3 Configuration
             services.AddAWSService<IAmazonS3>();
