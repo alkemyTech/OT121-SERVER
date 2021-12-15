@@ -13,6 +13,6 @@ namespace OngProject.Core.Interfaces.IServices
 {
     public interface IUserServices
     {
-        Task<User> RegisterAsync(UserRegistrationDTO user);
+        Task<UserRegistrationDTO> RegisterAsync(UserRegistrationDTO user);
     }
 }
