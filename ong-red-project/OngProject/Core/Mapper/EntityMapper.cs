@@ -104,7 +104,10 @@ namespace OngProject.Core.Mapper
                 Name = organization.Name,
                 Image = organization.Image,
                 Phone = organization.Phone,
-                Address = organization.Address
+                Address = organization.Address,
+                FacebookUrl = organization.FacebookUrl,
+                InstagramUrl = organization.InstagramUrl,
+                LinkedinUrl = organization.LinkedinUrl
             };
         }
         #endregion
