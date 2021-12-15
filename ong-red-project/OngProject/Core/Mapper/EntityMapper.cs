@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using OngProject.Common;
 using OngProject.Core.DTOs;
-
+using OngProject.Core.DTOs.UserDTOs;
 using OngProject.Core.Entities;
 using OngProject.Infrastructure.Repositories;
 
@@ -10,12 +11,8 @@ namespace OngProject.Core.Mapper
 {
     public class EntityMapper
     {
-        #region Slides Mappers
-        
-        #endregion
-        
-
         #region News Mappers
+
         public NewsDTO FromNewsToNewsDTO(News news)
         {
             var newsDTO = new NewsDTO()
@@ -27,6 +24,7 @@ namespace OngProject.Core.Mapper
             };
             return newsDTO;
         }
+
         public News FromNewsDTOtoNews(NewsDTO newsDTO)
         {
             var news = new News()
@@ -39,10 +37,10 @@ namespace OngProject.Core.Mapper
             return news;
         }
 
-        #endregion
-       
+        #endregion News Mappers
 
         #region Member Mapper
+
         public MembersDTO FromMembersToMembersDto(Member member)
         {
             var membersDTO = new MembersDTO()
@@ -53,14 +51,14 @@ namespace OngProject.Core.Mapper
                 LinkedinUrl = member.LinkedinUrl,
                 Image = member.Image,
                 Description = member.Description
-
             };
             return membersDTO;
         }
+
         public Member FromMembersDTOtoMember(MemberInsertDTO membersDTO)
         {
             return new Member()
-            { 
+            {
                 Name = membersDTO.Name,
                 FacebookUrl = membersDTO.FacebookUrl,
                 InstagramUrl = membersDTO.InstagramUrl,
@@ -70,9 +68,10 @@ namespace OngProject.Core.Mapper
             };
         }
 
-        #endregion
+        #endregion Member Mapper
 
         #region Contact Mappers
+
         public ContactDTO FromContactsToContactsDto(Contacts contact)
         {
             var contactDTO = new ContactDTO()
@@ -84,9 +83,11 @@ namespace OngProject.Core.Mapper
             };
             return contactDTO;
         }
-        #endregion
+
+        #endregion Contact Mappers
 
         #region Organization Mappers
+
         public OrganizationsDTO FromOrganizationToOrganizationDto(Organizations organization)
         {
             return new OrganizationsDTO
@@ -97,15 +98,37 @@ namespace OngProject.Core.Mapper
                 Address = organization.Address
             };
         }
-        #endregion
+
+        #endregion Organization Mappers
 
         #region User Mappers
 
-        
+        public User FromUserRegistrationDtoToUser(UserRegistrationDTO user)
+        {
+            return new User
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Password = Encrypt.GetSHA256(user.Password)
+            };
+        }
 
-        #endregion
+        public UserRegistrationDTO FromUserToUserRegistrationDto(User user)
+        {
+            return new UserRegistrationDTO
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Password = Encrypt.GetSHA256(user.Password)
+            };
+        }
+
+        #endregion User Mappers
 
         #region Activities Mappers
+
         public ActivitiesDTO FromActivitiesToActivitiesDTO(Activities activities)
         {
             var activitiesDTO = new ActivitiesDTO()
@@ -116,6 +139,7 @@ namespace OngProject.Core.Mapper
             };
             return activitiesDTO;
         }
+
         public Activities FromActivitiesDTOToActivities(ActivitiesDTO activitiesDTO)
         {
             var activities = new Activities()
@@ -127,11 +151,6 @@ namespace OngProject.Core.Mapper
             return activities;
         }
 
-
-        #endregion
-
-        #region Testimonials Mappers
-       
-        #endregion
+        #endregion Activities Mappers
     }
 }
