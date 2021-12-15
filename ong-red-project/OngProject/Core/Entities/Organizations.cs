@@ -41,6 +41,17 @@ namespace OngProject.Core.Entities
         [MaxLength(2000)]
         public string AboutUsText { get; set; }
 
+        [Column(TypeName = "VARCHAR(255)")]
+        [MaxLength(255)]
+        public string FacebookUrl { get; set; }
+
+        [Column(TypeName = "VARCHAR(255)")]
+        [MaxLength(255)]
+        public string InstagramUrl { get; set; }
+
+        [Column(TypeName = "VARCHAR(255)")]
+        [MaxLength(255)]
+        public string LinkedinUrl { get; set; }
     }
 }
 
