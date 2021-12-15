@@ -87,7 +87,6 @@ namespace OngProject.Core.Mapper
         #endregion Contact Mappers
 
         #region Organization Mappers
-
         public OrganizationsDTO FromOrganizationToOrganizationDto(Organizations organization)
         {
             return new OrganizationsDTO
@@ -98,11 +97,20 @@ namespace OngProject.Core.Mapper
                 Address = organization.Address
             };
         }
-
+      
+        public OrganizationsGetDTO FromOrganizationToOrganizationGetDto(Organizations organization)
+        {
+            return new OrganizationsGetDTO
+            {
+                Name = organization.Name,
+                Image = organization.Image,
+                Phone = organization.Phone,
+                Address = organization.Address
+            };
+        }
         #endregion Organization Mappers
 
         #region User Mappers
-
         public UserRegistrationDTO FromUserToUserRegistrationDto(User user)
         {
             return new UserRegistrationDTO
@@ -113,7 +121,6 @@ namespace OngProject.Core.Mapper
                 Password = user.Password
             };
         }
-
         #endregion User Mappers
 
         #region Activities Mappers

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OngProject.Controllers
 {
-    [Route("[controller]")]
+    [Route("organization")]
     [ApiController]
     public class OrganizationsController : ControllerBase
     {
@@ -19,7 +19,24 @@ namespace OngProject.Controllers
         {
             _organizationsServices = organizationsServices;
         }
-       
-        
+
+        #region Documentacion
+        /// <summary>
+        /// Endpoint para obtener datos publicos de una organizacion por id. Se debe ser un USUARIO
+        /// </summary>
+        /// <response code="200">Solicitud concretada con exito</response>
+        /// <response code="404">La organizacion no existe</response>
+        /// <response code="401">Credenciales no validas</response> 
+        #endregion
+        [HttpGet("public")]
+        public async Task<IActionResult> GetPublic([FromQuery] int id)
+        {
+            if (!_organizationsServices.EntityExists(id))
+            {
+                return NotFound();
+            }
+            var activity = await _organizationsServices.GetById(id);
+            return Ok(activity);
+        }
     }
 }

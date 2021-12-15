@@ -14,15 +14,26 @@ namespace OngProject.Core.Services
 {
     public class OrganizationsServices : IOrganizationsServices
     {
-       
-
-        public OrganizationsServices()
+        #region Object and Constructor
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly EntityMapper _mapper;
+        public OrganizationsServices(IUnitOfWork unitOfWork)
         {
-         
-           
+            _unitOfWork = unitOfWork;
+            _mapper = new EntityMapper();
         }
-       
+        #endregion
 
-      
+        public bool EntityExists(int id)
+        {
+            return _unitOfWork.OrganizationsRepository.EntityExists(id);
+        }
+
+        public async Task<OrganizationsGetDTO> GetById(int id)
+        {
+            var organizations = await _unitOfWork.OrganizationsRepository.GetById(id);
+            var organizationsDTO = _mapper.FromOrganizationToOrganizationGetDto(organizations);
+            return organizationsDTO;
+        }
     }
 }
