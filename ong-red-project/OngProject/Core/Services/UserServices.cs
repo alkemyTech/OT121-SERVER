@@ -27,12 +27,12 @@ namespace OngProject.Core.Services
         private readonly IImageService _imageServices;
         private readonly EntityMapper _mapper;
 
-        public UserServices(IUnitOfWork _unitOfWork, IConfiguration configuration, IImageService imageServices, EntityMapper mapper)
+        public UserServices(IUnitOfWork _unitOfWork, IConfiguration configuration, IImageService imageServices)
         {
             this._unitOfWork = _unitOfWork;
             _configuration = configuration;
             _imageServices = imageServices;
-            _mapper = mapper;
+            _mapper = new EntityMapper();
         }
 
         #endregion Object and Constructor
@@ -41,9 +41,18 @@ namespace OngProject.Core.Services
 
         public async Task<UserRegistrationDTO> RegisterAsync(UserRegistrationDTO user)
         {
-            var newUser = _mapper.FromUserRegistrationDtoToUser(user);
+            var newUser = new User
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Password = Encrypt.GetSHA256(user.Password),
+                RoleId = 2
+            };
 
             var result = await _unitOfWork.UsersRepository.Insert(newUser);
+
+            await _unitOfWork.SaveChangesAsync();
 
             return _mapper.FromUserToUserRegistrationDto(result);
         }

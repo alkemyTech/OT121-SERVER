@@ -103,17 +103,6 @@ namespace OngProject.Core.Mapper
 
         #region User Mappers
 
-        public User FromUserRegistrationDtoToUser(UserRegistrationDTO user)
-        {
-            return new User
-            {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                Password = Encrypt.GetSHA256(user.Password)
-            };
-        }
-
         public UserRegistrationDTO FromUserToUserRegistrationDto(User user)
         {
             return new UserRegistrationDTO
@@ -121,7 +110,7 @@ namespace OngProject.Core.Mapper
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
-                Password = Encrypt.GetSHA256(user.Password)
+                Password = user.Password
             };
         }
 
