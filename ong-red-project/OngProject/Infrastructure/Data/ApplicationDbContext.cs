@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using OngProject.Common;
 using OngProject.Core.Entities;
-using System;
 
 namespace OngProject.Infrastructure.Data
 {
@@ -53,7 +53,10 @@ namespace OngProject.Infrastructure.Data
                         Email = "Email for Organization " + i,
                         WelcomeText = "WelcomeText for Organization " + i,
                         AboutUsText = "AboutUsText for Organization " + i,
-                        CreatedAt = DateTime.Now
+                        CreatedAt = DateTime.Now,
+                        FacebookUrl = "https://www.facebook.com/" + i,
+                        InstagramUrl = "https://www.instagram.com/" + i,
+                        LinkedinUrl = "https://www.linkedin.com/in/" + i
                     }
                 );
             }
