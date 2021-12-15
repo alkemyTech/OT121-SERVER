@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Threading.Tasks;
 namespace OngProject.Core.Entities
 {
     public class Organizations : EntityBase
@@ -40,7 +40,17 @@ namespace OngProject.Core.Entities
         [Column(TypeName = "TEXT")]
         [MaxLength(2000)]
         public string AboutUsText { get; set; }
+        [Column(TypeName = "VARCHAR(255)")]
+        [MaxLength(255)]
+        public string FacebookUrl { get; set; }
 
+        [Column(TypeName = "VARCHAR(255)")]
+        [MaxLength(255)]
+        public string InstagramUrl { get; set; }
+
+        [Column(TypeName = "VARCHAR(255)")]
+        [MaxLength(255)]
+        public string LinkedinUrl { get; set; }
     }
 }
 
