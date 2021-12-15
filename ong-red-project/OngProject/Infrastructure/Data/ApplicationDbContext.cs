@@ -145,7 +145,13 @@ namespace OngProject.Infrastructure.Data
                         Id = 2,
                         Name = "Standard",
                         Description = "Description User Standard"
-                    }
+                    },
+                    new Role
+                    {
+                        Id = 3,
+                        Name = "Regular",
+                        Description = "Description User Regular"
+                    }                    
                 );
         }
     }
