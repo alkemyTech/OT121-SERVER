@@ -9,6 +9,7 @@ namespace OngProject.Core.Interfaces.IServices
 {
     public interface IOrganizationsServices
     {
-       
+        Task<OrganizationsGetDTO> GetById(int id);
+        bool EntityExists(int id);
     }
 }
