@@ -25,6 +25,13 @@
             <response code="200">Tarea ejecutada con exito devuelve el usuario registrado.</response>
             <response code="400">Errores de validacion.</response>
         </member>
+        <member name="M:OngProject.Controllers.AuthController.LoginAsync(OngProject.Core.DTOs.UserDTOs.UserLoginRequestDTO)">
+            <summary>
+            Endpoint para loguear un usuario.
+            </summary>
+            <response code="200">Tarea ejecutada con exito devuelve el usuario logueado.</response>
+            <response code="400">Errores de validación.</response>
+        </member>
         <member name="M:OngProject.Controllers.CommentsController.Delete(System.Int32)">
             <summary>
             Endpoint para eliminacion de baja logica de un Comentario. Se debe ser ADMINISTRADOR o USUARIO
@@ -49,6 +56,14 @@
             Endpoint para obtener un contact por id. Se debe ser ADMINISTRADOR
             </summary>
             <response code="200">Solicitud concretada con exito</response>
+            <response code="401">Credenciales no validas</response> 
+        </member>
+        <member name="M:OngProject.Controllers.OrganizationsController.GetPublic(System.Int32)">
+            <summary>
+            Endpoint para obtener datos publicos de una organizacion por id. Se debe ser un USUARIO
+            </summary>
+            <response code="200">Solicitud concretada con exito</response>
+            <response code="404">La organizacion no existe</response>
             <response code="401">Credenciales no validas</response> 
         </member>
         <member name="P:OngProject.Core.DTOs.MemberInsertDTO.Name">

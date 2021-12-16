@@ -57,6 +57,25 @@ namespace OngProject.Core.Services
             return _mapper.FromUserToUserRegistrationDto(result);
         }
 
+        public async Task<UserLoginResponseDTO> LoginAsync(UserLoginRequestDTO user)
+        {
+            var userLogin = await _unitOfWork.UsersRepository.GetByEmail(user.Email);
+
+            if (userLogin == null)
+            {
+                throw new Exception("Usuario o contraseña incorrectos.");
+            }
+
+            var result = Encrypt.Verify(user.Password, userLogin.Password);
+
+            if (!result)
+            {
+                throw new Exception("Usuario o contraseña incorrectos.");
+            }
+
+            return _mapper.FromUserToUserLoginResponseDto(userLogin);
+        }
+
         #endregion Methods
     }
 }

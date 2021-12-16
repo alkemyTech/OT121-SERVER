@@ -87,6 +87,7 @@ namespace OngProject.Core.Mapper
         #endregion Contact Mappers
 
         #region Organization Mappers
+
         public OrganizationsDTO FromOrganizationToOrganizationDto(Organizations organization)
         {
             return new OrganizationsDTO
@@ -97,7 +98,7 @@ namespace OngProject.Core.Mapper
                 Address = organization.Address
             };
         }
-      
+
         public OrganizationsGetDTO FromOrganizationToOrganizationGetDto(Organizations organization)
         {
             return new OrganizationsGetDTO
@@ -111,9 +112,11 @@ namespace OngProject.Core.Mapper
                 LinkedinUrl = organization.LinkedinUrl
             };
         }
+
         #endregion Organization Mappers
 
         #region User Mappers
+
         public UserRegistrationDTO FromUserToUserRegistrationDto(User user)
         {
             return new UserRegistrationDTO
@@ -124,6 +127,21 @@ namespace OngProject.Core.Mapper
                 Password = user.Password
             };
         }
+
+        public UserLoginResponseDTO FromUserToUserLoginResponseDto(User user)
+        {
+            return new UserLoginResponseDTO
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Photo = user.Photo,
+                Role = user.Role.Description,
+                CreatedAt = user.CreatedAt.ToString("dd/MM/yyyy H:mm"),
+                IsDeleted = user.IsDeleted
+            };
+        }
+
         #endregion User Mappers
 
         #region Activities Mappers
