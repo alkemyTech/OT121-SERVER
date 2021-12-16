@@ -95,6 +95,7 @@ namespace OngProject
                 var uri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
                 return new UriService(uri);
             });
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
 
         }
 
