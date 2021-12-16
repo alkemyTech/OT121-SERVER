@@ -23,6 +23,7 @@ namespace OngProject.Infrastructure.Data
             SeedActivities(builder);
             SeedContacts(builder);
             SeedOrganizations(builder);
+            builder.Seed();
         }
 
         public DbSet<Activities> Activities { get; set; }
