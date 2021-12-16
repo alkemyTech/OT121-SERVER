@@ -41,11 +41,16 @@ namespace OngProject.Controllers
             return Ok(await _userServices.RegisterAsync(newUser));
         }
 
+        #region Documentation
+
         /// <summary>
         /// Endpoint para loguear un usuario.
         /// </summary>
         /// <response code="200">Tarea ejecutada con exito devuelve el usuario logueado.</response>
-        /// <response code="400"></response>
+        /// <response code="400">Errores de validación.</response>
+
+        #endregion Documentation
+
         [HttpPost("Login")]
         public async Task<IActionResult> LoginAsync(UserLoginRequestDTO userLogin)
         {
