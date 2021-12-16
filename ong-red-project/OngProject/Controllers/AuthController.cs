@@ -6,6 +6,7 @@ using OngProject.Common;
 using OngProject.Core.DTOs;
 using OngProject.Core.DTOs.UserDTOs;
 using OngProject.Core.Interfaces.IServices;
+using System;
 using System.Threading.Tasks;
 
 namespace OngProject.Controllers
@@ -54,14 +55,16 @@ namespace OngProject.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> LoginAsync(UserLoginRequestDTO userLogin)
         {
-            var result = await _userServices.LoginAsync(userLogin);
-
-            if (result == null)
+            try
             {
-                return Ok(false);
-            }
+                var result = await _userServices.LoginAsync(userLogin);
 
-            return Ok(result);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

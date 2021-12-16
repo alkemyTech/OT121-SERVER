@@ -30,7 +30,7 @@
             Endpoint para loguear un usuario.
             </summary>
             <response code="200">Tarea ejecutada con exito devuelve el usuario logueado.</response>
-            <response code="400"></response>
+            <response code="400">Errores de validación.</response>
         </member>
         <member name="M:OngProject.Controllers.CommentsController.Delete(System.Int32)">
             <summary>
