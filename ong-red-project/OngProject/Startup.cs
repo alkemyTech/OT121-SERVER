@@ -96,7 +96,7 @@ namespace OngProject
                 return new UriService(uri);
             });
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
-
+            services.AddTransient<IMailService, MailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
