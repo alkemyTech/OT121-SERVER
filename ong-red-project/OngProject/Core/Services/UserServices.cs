@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 using OngProject.Common;
 using OngProject.Core.DTOs;
+using OngProject.Core.DTOs.UserDTOs;
 using OngProject.Core.Entities;
 using OngProject.Core.Interfaces.IServices;
 using OngProject.Core.Interfaces.IServices.AWS;
@@ -20,16 +21,42 @@ namespace OngProject.Core.Services
     public class UserServices : IUserServices
     {
         #region Object and Constructor
+
         private readonly IUnitOfWork _unitOfWork;
         private IConfiguration _configuration;
         private readonly IImageService _imageServices;
+        private readonly EntityMapper _mapper;
+
         public UserServices(IUnitOfWork _unitOfWork, IConfiguration configuration, IImageService imageServices)
         {
             this._unitOfWork = _unitOfWork;
             _configuration = configuration;
             _imageServices = imageServices;
+            _mapper = new EntityMapper();
         }
-        #endregion
-        
+
+        #endregion Object and Constructor
+
+        #region Methods
+
+        public async Task<UserRegistrationDTO> RegisterAsync(UserRegistrationDTO user)
+        {
+            var newUser = new User
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Password = Encrypt.GetSHA256(user.Password),
+                RoleId = 2
+            };
+
+            var result = await _unitOfWork.UsersRepository.Insert(newUser);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.FromUserToUserRegistrationDto(result);
+        }
+
+        #endregion Methods
     }
 }
