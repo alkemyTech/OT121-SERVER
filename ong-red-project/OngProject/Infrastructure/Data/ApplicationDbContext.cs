@@ -19,10 +19,9 @@ namespace OngProject.Infrastructure.Data
                 entity.HasIndex(e => e.Email).IsUnique();
             });
             SeedRoles(builder);
-            SeedUsers(builder);
-            SeedActivities(builder);
             SeedContacts(builder);
             SeedOrganizations(builder);
+            SeedUsers(builder);
             builder.Seed();
         }
 
@@ -63,23 +62,6 @@ namespace OngProject.Infrastructure.Data
             }
         }
 
-        private void SeedActivities(ModelBuilder modelBuilder)
-        {
-            for (int i = 1; i < 11; i++)
-            {
-                modelBuilder.Entity<Activities>().HasData(
-                    new Activities
-                    {
-                        Id = i,
-                        Name = "Activity " + i,
-                        Image = "ImageActivities" + i + ".jpg",
-                        Content = "Content from activity " + i,
-                        CreatedAt = DateTime.Now
-                    }
-                );
-            }
-        }
-
         private void SeedContacts(ModelBuilder modelBuilder)
         {
             for (int i = 1; i < 11; i++)
@@ -112,22 +94,6 @@ namespace OngProject.Infrastructure.Data
                         Password = Encrypt.GetSHA256("123456"),
                         Photo = "Photo for user " + i,
                         RoleId = 1,
-                        CreatedAt = DateTime.Now
-                    }
-                );
-            }
-            for (int i = 3; i <= 10; i++)
-            {
-                modelBuilder.Entity<User>().HasData(
-                    new User
-                    {
-                        Id = i,
-                        FirstName = "User" + i,
-                        LastName = "LastName for user " + i,
-                        Email = "Email for user " + i,
-                        Password = Encrypt.GetSHA256("123456"),
-                        Photo = "Photo for user " + i,
-                        RoleId = 2,
                         CreatedAt = DateTime.Now
                     }
                 );
