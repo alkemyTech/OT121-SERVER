@@ -40,5 +40,23 @@ namespace OngProject.Controllers
         {
             return Ok(await _userServices.RegisterAsync(newUser));
         }
+
+        /// <summary>
+        /// Endpoint para loguear un usuario.
+        /// </summary>
+        /// <response code="200">Tarea ejecutada con exito devuelve el usuario logueado.</response>
+        /// <response code="400"></response>
+        [HttpPost("Login")]
+        public async Task<IActionResult> LoginAsync(UserLoginRequestDTO userLogin)
+        {
+            var result = await _userServices.LoginAsync(userLogin);
+
+            if (result == null)
+            {
+                return Ok(false);
+            }
+
+            return Ok(result);
+        }
     }
 }
