@@ -217,8 +217,52 @@ namespace OngProject.Infrastructure.Data
                     RoleId = 3,
                     CreatedAt = new DateTime(2021,12,15)
                 }
+            );
 
+            modelBuilder.Entity<Activities>().HasData(
+                //Activities
+                new Activities {
+                    Id = 1,
+                    Name = "Apoyo Escolar para el nivel Primario",
+                    Content = "El espacio de apoyo escolar es el corazón del área educativa. Se realizan los talleres de lunes a jueves de 10 a 12 horas y de 14 a 16 horas en el contraturno, Los sábados también se realiza el taller para niños y niñas que asisten a la escuela doble turno. Tenemos un espacio especial para los de 1er grado 2 veces por semana ya que ellos necesitan atención especial!",
+                    Image = "",
+                    CreatedAt = new DateTime(2021,12,12)
+                },
+
+                new Activities {
+                    Id = 2,
+                    Name = "Apoyo Escolar Nivel Secundaria",
+                    Content = "Del mismo modo que en primaria, este taller es el corazón del área secundaria. Se realizan talleres de lunes a viernes de 10 a 12 horas y de 16 a 18 horas en el contraturno. Actualmente se encuentran inscriptos en el taller 50 adolescentes entre 13 y 20 años. Aquí los jóvenes se presentan con el material que traen del colegio y una docente de la institución y un grupo de voluntarios los recibe para ayudarlos a estudiar o hacer la tarea.",
+                    Image = "",
+                    CreatedAt = new DateTime(2021,11,01)
+                }, 
+
+                new Activities {
+                    Id = 3,
+                    Name = "Tutorias",
+                    Content = "Es un programa destinado a jóvenes a partir del tercer año de secundaria, cuyo objetivo es garantizar su permanencia en la escuela y construir un proyecto de vida que da sentido al colegio. El objetivo de esta propuesta es lograr la integración escolar de niños y jóvenes del barrio promoviendo el soporte socioeducativo y emocional apropiado, desarrollando los recursos institucionales necesarios a través de la articulación de nuestras intervenciones con las escuelas que los alojan, con las familias de los alumnos y con las instancias municipales, provinciales y nacionales que correspondan.",
+                    Image = "",
+                    CreatedAt = new DateTime(2021,02,04)
+                },
+
+                new Activities {
+                    Id = 4,
+                    Name = "Taller De Arte y Cuentos",
+                    Content = "Taller literario y de manualidades que se realiza semanalmente.",
+                    Image = "",
+                    CreatedAt = new DateTime(2021,11,12)
+                },
+
+                new Activities {
+                    Id = 5,
+                    Name = "Paseos recreativos y educativos",
+                    Content = "Estos paseos están pensados para promover la participación y sentido de pertenencia de los niños, niñas y adolescentes al área educativa.",
+                    Image = "",
+                    CreatedAt = new DateTime(2021,10,11)
+                }
             );
         }       
     }
 }
+
+      
