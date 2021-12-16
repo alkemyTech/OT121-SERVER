@@ -22,7 +22,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 2,
-                    CreatedAt = DateTime.Now                
+                    CreatedAt = new DateTime(2021,12,15)                
                 },
                 new User {
                     Id = 12,
@@ -32,7 +32,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 2,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = new DateTime(2021,12,15)
                 },
                 new User {
                     Id = 13,
@@ -42,7 +42,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 2,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = new DateTime(2021,12,15)
                 },
                 new User {
                     Id = 14,
@@ -52,7 +52,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 2,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = new DateTime(2021,12,15)
                 },
                 new User {
                     Id = 15,
@@ -62,7 +62,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 2,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = new DateTime(2021,12,15)
                 },
                 new User {
                     Id = 16,
@@ -72,7 +72,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 2,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = new DateTime(2021,12,15)
                 },
                 new User {
                     Id = 17,
@@ -82,7 +82,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 2,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = new DateTime(2021,12,15)
                 },
                 new User {
                     Id = 18,
@@ -92,7 +92,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 2,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = new DateTime(2021,12,15)
                 },
                 new User {
                     Id = 19,
@@ -102,7 +102,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 2,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = new DateTime(2021,12,15)
                 },
                 new User {
                     Id = 20,
@@ -112,7 +112,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 2,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = new DateTime(2021,12,15)
                 },
                 
                 //Regular Users
@@ -125,7 +125,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 3,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = new DateTime(2021,12,15)
                 },
                 new User {
                     Id = 22,
@@ -135,7 +135,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 3,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = new DateTime(2021,12,15)
                 },
                 new User {
                     Id = 23,
@@ -145,7 +145,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 3,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = new DateTime(2021,12,15)
                 },
                 new User {
                     Id = 24,
@@ -155,7 +155,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 3,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = new DateTime(2021,12,15)
                 },
                 new User {
                     Id = 25,
@@ -165,7 +165,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 3,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = new DateTime(2021,12,15)
                 },
                 new User {
                     Id = 26,
@@ -175,7 +175,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 3,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = new DateTime(2021,12,15)
                 },
                 new User {
                     Id = 27,
@@ -185,7 +185,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 3,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = new DateTime(2021,12,15)
                 },
                 new User {
                     Id = 28,
@@ -195,7 +195,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 3,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = new DateTime(2021,12,15)
                 },
                 new User {
                     Id = 29,
@@ -205,7 +205,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 3,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = new DateTime(2021,12,15)
                 },
                 new User {
                     Id = 30,
@@ -215,7 +215,7 @@ namespace OngProject.Infrastructure.Data
                     Password = Encrypt.GetSHA256("1234"),
                     Photo = "",
                     RoleId = 3,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = new DateTime(2021,12,15)
                 }
 
             );
