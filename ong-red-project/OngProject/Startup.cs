@@ -67,10 +67,11 @@ namespace OngProject
             });
 
             // JWT Token Generator
-           
+
 
             //AWS S3 Configuration
-            services.AddAWSService<IAmazonS3>();
+            services.AddAWSService<IAmazonS3>(Configuration.GetAWSOptions());
+            services.AddMvc();
 
             // Add Services
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));            
