@@ -136,7 +136,7 @@ namespace OngProject.Core.Mapper
                 LastName = user.LastName,
                 Email = user.Email,
                 Photo = user.Photo,
-                Role = user.Role.Description,
+                Role = user.Role.Name,
                 CreatedAt = user.CreatedAt.ToString("dd/MM/yyyy H:mm"),
                 IsDeleted = user.IsDeleted
             };
