@@ -93,9 +93,7 @@ namespace OngProject.Core.Services
                 Email = userLogin.Email,
                 Photo = userLogin.Photo,
                 Role = userLogin.Role.Name,
-                CreatedAt = userLogin.CreatedAt.ToString("dd/MM/yyyy H:mm"),
-                IsDeleted = userLogin.IsDeleted,
-                JWToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
+                JWToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken)
             };
 
             return response;
@@ -110,13 +108,9 @@ namespace OngProject.Core.Services
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
-                new Claim("FirstName", user.FirstName),
-                new Claim("LastName", user.LastName),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("Photo", user.Photo),
                 new Claim("Role", user.Role.Name),
-                new Claim("CreatedAt", user.CreatedAt.ToString("dd/MM/yyyy H:mm")),
-                new Claim("IsDeleted", user.IsDeleted.ToString()),
+                new Claim("Password", user.Password),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 

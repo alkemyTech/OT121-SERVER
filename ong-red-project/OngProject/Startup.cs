@@ -91,7 +91,7 @@ namespace OngProject
                     ClockSkew = TimeSpan.Zero,
                     ValidIssuer = Configuration["JWTSettings:Issuer"],
                     ValidAudience = Configuration["JWTSettings:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTSettings:key"]))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTSettings:Key"]))
                 };
 
                 options.Events = new JwtBearerEvents()
