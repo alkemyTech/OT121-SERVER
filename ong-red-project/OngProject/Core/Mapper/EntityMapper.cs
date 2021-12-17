@@ -128,20 +128,6 @@ namespace OngProject.Core.Mapper
             };
         }
 
-        public UserLoginResponseDTO FromUserToUserLoginResponseDto(User user)
-        {
-            return new UserLoginResponseDTO
-            {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                Photo = user.Photo,
-                Role = user.Role.Name,
-                CreatedAt = user.CreatedAt.ToString("dd/MM/yyyy H:mm"),
-                IsDeleted = user.IsDeleted
-            };
-        }
-
         #endregion User Mappers
 
         #region Activities Mappers
