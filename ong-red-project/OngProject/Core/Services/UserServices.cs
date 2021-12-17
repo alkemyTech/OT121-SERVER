@@ -76,6 +76,14 @@ namespace OngProject.Core.Services
             return _mapper.FromUserToUserLoginResponseDto(userLogin);
         }
 
-        #endregion Methods
-    }
+        public async Task<bool> UserExistsByEmail(string email)
+        {
+            var result = await _unitOfWork.UsersRepository.GetByEmail(email);
+            if (result == null)
+				return false;
+			return true;
+        }
+
+    #endregion Methods
+}
 }
