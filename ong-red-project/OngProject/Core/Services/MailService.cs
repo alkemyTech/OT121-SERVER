@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.Options;
+using OngProject.Core.Entities;
 using OngProject.Core.Interfaces.IServices;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,9 +15,11 @@ namespace OngProject.Core.Services
     {
         #region Object and Constructor
         private readonly Entities.MailSettings _mailSettings;
-        public MailService(IOptions<Entities.MailSettings> mailSettings)
+        private readonly MailConstants _mailConstants;
+        public MailService(IOptions<Entities.MailSettings> mailSettings, IOptions<MailConstants> mailConstants)
         {
             _mailSettings = mailSettings.Value;
+            _mailConstants = mailConstants.Value;
         }
         #endregion
 
@@ -47,6 +51,25 @@ namespace OngProject.Core.Services
             {
                 throw new Exception(ex.Message);
             }
+        }
+        #endregion
+
+        #region Send Email with Template
+        public async Task SendEmailWithTemplate(string ToEmail, string mailTitle, string mailBody, string mailContact)
+        {
+            string template = File.ReadAllText(_mailConstants.PathTemplate);
+            template = template.Replace(_mailConstants.ReplaceMailTitle, mailTitle);
+            template = template.Replace(_mailConstants.ReplaceMailBody, mailBody);
+            template = template.Replace(_mailConstants.ReplaceMailContact, mailContact);
+            await SendEmailAsync(ToEmail, template, mailTitle);
+        }
+        #endregion
+
+        #region Send Email when user register
+        public async Task SendEmailRegisteredUser(string ToEmail, string fullname)
+        {
+            string mailBody = _mailConstants.WelcomeMailBody + fullname;
+            await SendEmailWithTemplate(ToEmail, _mailConstants.TitleMailConfirm, mailBody, _mailConstants.MailONG);
         }
         #endregion
     }
