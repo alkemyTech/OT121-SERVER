@@ -18,10 +18,12 @@ namespace OngProject.Controllers
         #region Object and Constructor
 
         private readonly IUserServices _userServices;
+        private readonly IMailService _mailService;
 
-        public AuthController(IUserServices _userServices)
+        public AuthController(IUserServices _userServices, IMailService mailService)
         {
             this._userServices = _userServices;
+            _mailService = mailService;
         }
 
         #endregion Object and Constructor
@@ -39,7 +41,12 @@ namespace OngProject.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync(UserRegistrationDTO newUser)
         {
-            return Ok(await _userServices.RegisterAsync(newUser));
+            var result = await _userServices.UserExistsByEmail(newUser.Email);
+            if (result)
+                return BadRequest();
+            var registered = await _userServices.RegisterAsync(newUser);
+            await _mailService.SendEmailRegisteredUser(registered.Email, $"{registered.FirstName} {registered.LastName}");
+            return Ok(registered);
         }
 
         #region Documentation

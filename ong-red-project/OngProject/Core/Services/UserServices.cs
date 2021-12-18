@@ -73,14 +73,14 @@ namespace OngProject.Core.Services
 
             if (userLogin == null)
             {
-                throw new Exception("Usuario o contraseña incorrectos.");
+                throw new Exception("Usuario o contraseÃ±a incorrectos.");
             }
 
             var result = Encrypt.Verify(user.Password, userLogin.Password);
 
             if (!result)
             {
-                throw new Exception("Usuario o contraseña incorrectos.");
+                throw new Exception("Usuario o contraseÃ±a incorrectos.");
             }
 
             JwtSecurityToken jwtSecurityToken = GenerateJWTToken(userLogin);
@@ -128,6 +128,16 @@ namespace OngProject.Core.Services
             return jwtSecurityToken;
         }
 
-        #endregion Private Methods (Token)
+        #endregion Private Methods (Token)    
+    
+        public async Task<bool> UserExistsByEmail(string email)
+        {
+            var result = await _unitOfWork.UsersRepository.GetByEmail(email);
+            if (result == null)
+				    return false;
+			      return true;
+        }
+
     }
+
 }
