@@ -128,14 +128,24 @@ namespace OngProject.Core.Services
             return jwtSecurityToken;
         }
 
-        #endregion Private Methods (Token)    
-    
-        public async Task<bool> UserExistsByEmail(string email)
+        #endregion Private Methods (Token)   
+
+        public async Task<UserProfileDTO> UserExistsByEmail(string email)
         {
             var result = await _unitOfWork.UsersRepository.GetByEmail(email);
             if (result == null)
-				    return false;
-			      return true;
+				    return null;
+
+            UserProfileDTO response = new()
+            {
+                FirstName = result.FirstName,
+                LastName = result.LastName,
+                Email = result.Email,
+                Photo = result.Photo,
+                Role = result.Role.Name
+            };
+
+            return response;
         }
 
     }

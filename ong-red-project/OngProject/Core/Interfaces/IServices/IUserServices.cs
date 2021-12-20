@@ -10,6 +10,6 @@ namespace OngProject.Core.Interfaces.IServices
 
         Task<UserLoginResponseDTO> LoginAsync(UserLoginRequestDTO user);
 
-        Task<bool> UserExistsByEmail(string email);
+        Task<UserProfileDTO> UserExistsByEmail(string email);
     }
 }

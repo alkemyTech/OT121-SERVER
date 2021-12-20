@@ -7,6 +7,7 @@ using OngProject.Core.DTOs;
 using OngProject.Core.DTOs.UserDTOs;
 using OngProject.Core.Interfaces.IServices;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace OngProject.Controllers
@@ -42,8 +43,9 @@ namespace OngProject.Controllers
         public async Task<IActionResult> RegisterAsync(UserRegistrationDTO newUser)
         {
             var result = await _userServices.UserExistsByEmail(newUser.Email);
-            if (result)
+            if (result != null)
                 return BadRequest($"El usuario con el email {newUser.Email} ya esta en uso.");
+
             var registered = await _userServices.RegisterAsync(newUser);
             await _mailService.SendEmailRegisteredUser(registered.Email, $"{registered.FirstName} {registered.LastName}");
 
@@ -75,6 +77,39 @@ namespace OngProject.Controllers
             {
                 var result = await _userServices.LoginAsync(userLogin);
 
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        #region Documentation
+
+        /// <summary>
+        /// Endpoint para obtener los datos de un usuario por medio de un token.
+        /// </summary>
+        /// <response code="200">Tarea ejecutada con exito devuelve el profile del usuario por medio del Token.</response>
+        /// <response code="400">Errores de validación.</response>
+
+        #endregion Documentation
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<IActionResult> ProfileAsync()
+        {
+            try
+            {
+                var claimsIdentity = this.User.Identity as ClaimsIdentity;
+                var userEmail = claimsIdentity.FindFirst(ClaimTypes.Email)?.Value;
+
+                if(userEmail == null)
+                    return BadRequest();
+
+                var result = await _userServices.UserExistsByEmail(userEmail);
+                if (result == null)
+                    return BadRequest();
+                    
                 return Ok(result);
             }
             catch (Exception e)
