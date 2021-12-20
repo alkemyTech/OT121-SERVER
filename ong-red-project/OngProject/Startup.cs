@@ -14,8 +14,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using OngProject.Common;
 using OngProject.Core.Entities;
 using OngProject.Core.Helper;
+using OngProject.Core.Helper.Common;
 using OngProject.Core.Helper.Pagination;
 using OngProject.Core.Interfaces.IServices;
 using OngProject.Core.Interfaces.IServices.AWS;
@@ -48,7 +51,6 @@ namespace OngProject
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddEntityFrameworkSqlServer();
             services.AddDbContextPool<ApplicationDbContext>((services, options) =>
             {
@@ -60,20 +62,72 @@ namespace OngProject
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OngProject", Version = "v1" });
-               
+
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
 
             // JWT Token Generator
-           
+
+            #region JWT Token Generator
+
+            services.Configure<JWTSettings>(Configuration.GetSection("JWTSettings"));
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = false;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
+                    ValidIssuer = Configuration["JWTSettings:Issuer"],
+                    ValidAudience = Configuration["JWTSettings:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTSettings:Key"]))
+                };
+
+                options.Events = new JwtBearerEvents()
+                {
+                    OnAuthenticationFailed = c =>
+                    {
+                        c.NoResult();
+                        c.Response.StatusCode = 500;
+                        c.Response.ContentType = "text/plain";
+                        return c.Response.WriteAsync(c.Exception.ToString());
+                    },
+                    OnChallenge = context =>
+                    {
+                        context.HandleResponse();
+                        context.Response.StatusCode = 401;
+                        context.Response.ContentType = "application/json";
+                        var result = JsonConvert.SerializeObject(new Result().Fail("Usted no esta autorizado."));
+                        return context.Response.WriteAsync(result);
+                    },
+                    OnForbidden = context =>
+                    {
+                        context.Response.StatusCode = 400;
+                        context.Response.ContentType = "application/json";
+                        var result = JsonConvert.SerializeObject(new Result().Fail("Usted no posee permisos sobre este recurso."));
+                        return context.Response.WriteAsync(result);
+                    }
+                };
+            });
+
+            #endregion JWT Token Generator
 
             //AWS S3 Configuration
             services.AddAWSService<IAmazonS3>();
 
             // Add Services
-            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));            
+            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IContactsServices, ContactsServices>();
             services.AddTransient<IMemberServices, MemberServices>();
@@ -83,11 +137,11 @@ namespace OngProject
             services.AddTransient<INewsServices, NewsServices>();
             services.AddTransient<IActivitiesServices, ActivitiesServices>();
             services.AddTransient<IUserServices, UserServices>();
-            services.AddTransient<ICommentsServices, CommentsServices>();   
+            services.AddTransient<ICommentsServices, CommentsServices>();
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<ITestimonialsServices, TestimonialsServices>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            
+
             services.AddSingleton<IUriService>(x =>
             {
                 var accessor = x.GetRequiredService<IHttpContextAccessor>();
