@@ -138,25 +138,7 @@ namespace OngProject.Core.Mapper
                 Email = user.Email,
                 Photo = user.Photo,
                 Role = user.Role.Description,
-                CreatedAt = user.CreatedAt.ToString("dd/MM/yyyy H:mm"),
-                IsDeleted = user.IsDeleted
             };
-
-
-        #endregion Organization Mappers
-
-        #region User Mappers
-
-        public UserRegistrationDTO FromUserToUserRegistrationDto(User user)
-        {
-            return new UserRegistrationDTO
-            {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                Password = user.Password
-            };
-
         }
 
         #endregion User Mappers
