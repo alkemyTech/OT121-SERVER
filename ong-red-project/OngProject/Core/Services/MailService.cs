@@ -72,5 +72,13 @@ namespace OngProject.Core.Services
             await SendEmailWithTemplate(ToEmail, _mailConstants.TitleMailConfirm, mailBody, _mailConstants.MailONG);
         }
         #endregion
+
+        #region Send Email when someone contacts by Web 
+        public async Task SendEmailRegisteredContact(string ToEmail, string fullname)
+        {
+            string mailBody = fullname + _mailConstants.ReplyToContact;
+            await SendEmailWithTemplate(ToEmail, _mailConstants.TitleMailContact, mailBody, _mailConstants.MailONG);
+        }
+        #endregion
     }
 }

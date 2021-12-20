@@ -8,5 +8,6 @@ namespace OngProject.Core.Interfaces.IServices
         Task SendEmailAsync(string ToEmail, string body, string subject);
         Task SendEmailWithTemplate(string ToEmail, string mailTitle, string mailBody, string mailContact);
         Task SendEmailRegisteredUser(string ToEmail, string fullname);
+        Task SendEmailRegisteredContact(string ToEmail, string fullname);
     }
 }
