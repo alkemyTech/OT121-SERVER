@@ -70,6 +70,7 @@ namespace OngProject
 
             // JWT Token Generator
 
+
             #region JWT Token Generator
 
             services.Configure<JWTSettings>(Configuration.GetSection("JWTSettings"));
@@ -123,8 +124,9 @@ namespace OngProject
 
             #endregion JWT Token Generator
 
+
             //AWS S3 Configuration
-            services.AddAWSService<IAmazonS3>();
+            services.AddAWSService<IAmazonS3>(Configuration.GetAWSOptions());
 
             // Add Services
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));

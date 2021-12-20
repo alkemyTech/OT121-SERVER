@@ -9,5 +9,6 @@ namespace OngProject.Core.Interfaces.IServices.AWS
     public interface IImageService
     {
         Task<string> SaveImageAsync(IFormFile file);
+        string GetImageUrl(string imageName);
     }
 }
