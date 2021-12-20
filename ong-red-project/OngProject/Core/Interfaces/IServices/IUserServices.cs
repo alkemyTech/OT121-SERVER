@@ -9,5 +9,7 @@ namespace OngProject.Core.Interfaces.IServices
         Task<UserRegistrationDTO> RegisterAsync(UserRegistrationDTO user);
 
         Task<UserLoginResponseDTO> LoginAsync(UserLoginRequestDTO user);
+
+        Task<bool> UserExistsByEmail(string email);
     }
 }
