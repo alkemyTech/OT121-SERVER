@@ -22,7 +22,11 @@ namespace OngProject.Infrastructure.Data
             SeedContacts(builder);
             SeedOrganizations(builder);
             SeedUsers(builder);
+
+            SeedTestimonios(builder);
+
             SeedMiembros(builder);
+
             builder.Seed();
         }
 
@@ -126,6 +130,48 @@ namespace OngProject.Infrastructure.Data
                 );
         }
 
+
+
+        private void SeedTestimonios(ModelBuilder modelBuilder)
+        {
+
+
+            modelBuilder.Entity<Testimonials>().HasData(
+                new Testimonials
+                {
+                    Id = 1,
+                    Name = "Ayuda a los niños sin hogar en santa fe",
+                    Image = "",
+                    Content = "El ONG ayudo a muchos niños en una ciudad humilde de santa fe"
+                },
+                 new Testimonials
+                 {
+                     Id = 2,
+                     Name = "Ayuda a las personas con VIH Mar del plata",
+                     Image = "",
+                     Content = "El ONG ayudo a muchas personas con VIH sin exception"
+                 },
+                  new Testimonials
+                  {
+                      Id = 3,
+                      Name = "Ayuda a las mujeres embarazadas",
+                      Image = "",
+                      Content = "El ONG ayudo a muchos mujeres "
+                  },
+                   new Testimonials
+                   {
+                       Id = 4,
+                       Name = "Ayuda a muvha gente con discapacidad en Once",
+                       Image = "",
+                       Content = "Durante la cuarentena,El ONG ayudo a mucha gente con discapacidad "
+                   });
+
+
+
+        }
+
+
+
         private void SeedMiembros(ModelBuilder modelBuilder)
         {
            
@@ -179,6 +225,7 @@ namespace OngProject.Infrastructure.Data
            
                             });
         }
+
 
     }
 }
