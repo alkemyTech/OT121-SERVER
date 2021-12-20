@@ -22,6 +22,7 @@ namespace OngProject.Infrastructure.Data
             SeedContacts(builder);
             SeedOrganizations(builder);
             SeedUsers(builder);
+            SeedMiembros(builder);
             builder.Seed();
         }
 
@@ -124,5 +125,60 @@ namespace OngProject.Infrastructure.Data
                     }                    
                 );
         }
+
+        private void SeedMiembros(ModelBuilder modelBuilder)
+        {
+           
+
+                modelBuilder.Entity<Member>().HasData(
+                    new Member
+                    {
+                        Id = 1,
+                        Name = "Rodrigo Fuente",
+                        Image = "1"
+                        
+                    },
+                      new Member
+                      {
+                          Id = 2,
+                          Name = "Miriam Rodriguez",
+                          Image = "2"
+                      },
+                        new Member
+                        {
+                            Id = 3,
+                            Name = "Maria Irola",
+                            Image = "3"
+                        },
+                          new Member
+                          {
+                              Id = 4,
+                              Name = "Marita Gomez",
+                              Image = "4"
+
+                          },
+                          new Member
+                          {
+                              Id = 5,
+                              Name = "Maria Garcia",
+                              Image = "5"
+
+                          },
+                           new Member
+                          {
+                              Id = 6,
+                              Name = "Marco Fernandez",
+                              Image = "6"
+                          },
+
+                            new Member
+                            {
+                                Id = 7,
+                                Name = "Cecilia Mendez",
+                                Image = "7"
+           
+                            });
+        }
+
     }
 }
