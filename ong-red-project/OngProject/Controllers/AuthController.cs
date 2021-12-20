@@ -54,7 +54,7 @@ namespace OngProject.Controllers
         /// <summary>
         /// Endpoint para loguear un usuario.
         /// </summary>
-        /// <response code="200">Tarea ejecutada con exito devuelve el usuario logueado.</response>
+        /// <response code="200">Tarea ejecutada con exito devuelve el usuario logueado y genera un token unico para el usuario.</response>
         /// <response code="400">Errores de validación.</response>
 
         #endregion Documentation
