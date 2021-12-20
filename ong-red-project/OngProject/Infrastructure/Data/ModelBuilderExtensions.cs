@@ -261,6 +261,39 @@ namespace OngProject.Infrastructure.Data
                     CreatedAt = new DateTime(2021,10,11)
                 }
             );
+
+            //News Test Data
+            modelBuilder.Entity<News>().HasData(
+                new News {
+                    Id = 1,
+                    Name = "Programa de medicamentos gratuitos",
+                    Content = "Gracias al Gobierno provincial estaremos entregando medicamentos gratuitos a aquellas personas que padezcan VIH",
+                    CategoryId = 1,
+                    CreatedAt = new DateTime(2021,03,01)
+                },
+                new News {
+                    Id = 2,
+                    Name = "Taller de Idiomas",
+                    Content = "Inauguramos el taller de idiomas para personas con alguna discapacidad, el mismo instruye al alumno en idiomas como Inglés y Francés.",
+                    CategoryId = 2,
+                    CreatedAt = new DateTime(2021,03,01)
+                },
+                new News {
+                    Id = 3,
+                    Name = "Plan de nutrición a embarazadas",
+                    Content = "La desnutrición en embarazadas es un caso que se presenta frecuentemente en la comunidad. Por eso lanzamos este plan de nutrición para garantizar que la gestación se lleve a cabo de manera saludable tanto para el niño como para la madre.",
+                    CategoryId = 3,
+                    CreatedAt = new DateTime(2021,03,01)
+                },
+                new News {
+                    Id = 4,
+                    Name = "Asistencia en reubicación de hogar",
+                    Content = "Estamos comprometidos con la comunidad para reubicar a los niños sin hogar, con esto se busca garantizarles un ambiente familiar que todo ser humano necesita.",
+                    CategoryId = 4, 
+                    CreatedAt = new DateTime(2021,06,01)
+                }
+            );
+
         }       
     }
 }
