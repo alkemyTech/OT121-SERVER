@@ -17,13 +17,16 @@ namespace OngProject.Controllers
     {
         #region Objects and Constructor
         private readonly IContactsServices _contactsServices;
-        public ContactsController(IContactsServices contactsServices)
+        private readonly IMailService _mailService;
+
+        public ContactsController(IContactsServices contactsServices, IMailService mailService)
         {
             _contactsServices = contactsServices;
+            _mailService = mailService;
         }
         #endregion
 
-       
+
 
         #region Documentacion
         /// <summary>
@@ -32,7 +35,7 @@ namespace OngProject.Controllers
         /// <response code="200">Solicitud concretada con exito</response>
         /// <response code="401">Credenciales no validas</response> 
         #endregion
-        
+
         [HttpGet("{id}")]
         public async Task<ActionResult<ContactDTO>> Get(int id)
         {
@@ -50,6 +53,24 @@ namespace OngProject.Controllers
                 return BadRequest(result.Message);
             }
         }
-      
+
+        #region Documentation
+
+        /// <summary>
+        /// Endpoint para registrar contacto desde el sitio y envia un correo.
+        /// </summary>
+        /// <response code="200">Tarea ejecutada con exito, envia email cuando se registre un nuevo contacto en el sitio .</response>
+        /// <response code="400">Errores de validacion.</response>
+
+        #endregion Documentation
+
+        [HttpPost()]
+        public async Task<IActionResult> ContactsAsync(ContactDTO contact)
+        {
+            var registered = await _contactsServices.RegisterAsync(contact);
+            await _mailService.SendEmailRegisteredContact(registered.Email, registered.Name);
+            return Ok(registered);
+        }
+
     }
 }
