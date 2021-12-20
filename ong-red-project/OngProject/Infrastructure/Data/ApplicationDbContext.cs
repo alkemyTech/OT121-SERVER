@@ -23,9 +23,13 @@ namespace OngProject.Infrastructure.Data
             SeedOrganizations(builder);
             SeedUsers(builder);
 
+            SeedCategorias(builder);
+
+
             SeedTestimonios(builder);
 
             SeedMiembros(builder);
+
 
             builder.Seed();
         }
@@ -131,6 +135,42 @@ namespace OngProject.Infrastructure.Data
         }
 
 
+        private void SeedCategorias(ModelBuilder modelBuilder)
+        {
+
+
+            modelBuilder.Entity<Category>().HasData(
+                new Category
+                {
+                    Id = 4,
+                    Name = "Ayuda niños sin hogar",
+                    Image = "",
+                    Description = "El ONG ayudo a muchos niños"
+                },
+                new Category
+                {
+                    Id = 1,
+                    Name = "Ayuda Persona con VIH",
+                    Image = "",
+                    Description = "El ONG ayudo a Personas con VIH"
+                },
+                new Category
+                {
+                    Id = 2,
+                    Name = "Ayuda a Persona con discapacidad",
+                    Image = "",
+                    Description = "El ONG ayudo a mucha gente con discapacidad"
+                },
+                new Category
+                {
+                    Id = 3,
+                    Name = "Ayuda a mujer embarazadas",
+                    Image = "",
+                    Description = "Ayuda para  nujeres en su momento de gestacion"
+                });
+        }
+
+
 
         private void SeedTestimonios(ModelBuilder modelBuilder)
         {
@@ -229,3 +269,4 @@ namespace OngProject.Infrastructure.Data
 
     }
 }
+
