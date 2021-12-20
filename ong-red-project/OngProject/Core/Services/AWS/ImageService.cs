@@ -13,25 +13,17 @@ namespace OngProject.Core.Services.AWS
     public class ImageService : IImageService
     {
         #region Object and Constructor
-        private readonly IConfiguration _configuration;
         private IAmazonS3 _amazonS3;
-        public ImageService(IAmazonS3 amazonS3, IConfiguration configuration)
+        public ImageService(IAmazonS3 amazonS3)
         {
             _amazonS3 = amazonS3;
-            _configuration = configuration;
         }
         #endregion
         public async Task<string> SaveImageAsync(IFormFile file)
         {
-            AmazonS3Config config = new AmazonS3Config
-            {
-                SignatureVersion = "4",
-                RegionEndpoint = Amazon.RegionEndpoint.GetBySystemName("us-east-2") // Región pendiente por definir
-        };
 
             try
             {
-                _amazonS3 = new AmazonS3Client(_configuration["aws_access_key_id"], _configuration["aws_secret_access_key"], config);
                 var putRequest = new PutObjectRequest()
                 {
                     BucketName = "", // Bucket pendiente por definir
@@ -48,6 +40,24 @@ namespace OngProject.Core.Services.AWS
                 return ex.Message;
             }
 
+        }
+        public string GetImageUrl(string imageName)
+        {
+            try
+            {
+                GetPreSignedUrlRequest request = new GetPreSignedUrlRequest
+                {
+                    BucketName = "",
+                    Key = imageName,
+                    Expires = DateTime.Now.AddDays(30)
+                };
+                string path = _amazonS3.GetPreSignedURL(request);
+
+                return path;
+            }catch(Exception ex)
+            {
+                return ex.Message;
+            }
         }
     }
 }
