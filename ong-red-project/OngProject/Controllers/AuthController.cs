@@ -43,10 +43,19 @@ namespace OngProject.Controllers
         {
             var result = await _userServices.UserExistsByEmail(newUser.Email);
             if (result)
-                return BadRequest();
+                return BadRequest($"El usuario con el email {newUser.Email} ya esta en uso.");
             var registered = await _userServices.RegisterAsync(newUser);
             await _mailService.SendEmailRegisteredUser(registered.Email, $"{registered.FirstName} {registered.LastName}");
-            return Ok(registered);
+
+            var registerLogin = new UserLoginRequestDTO
+            {
+                Email = newUser.Email,
+                Password = newUser.Password
+            };
+
+            var resultLogin = await _userServices.LoginAsync(registerLogin);
+
+            return Ok(resultLogin);
         }
 
         #region Documentation
