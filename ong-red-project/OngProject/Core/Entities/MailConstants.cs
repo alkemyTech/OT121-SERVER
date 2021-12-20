@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace OngProject.Core.Entities
 {
-    public class MailConstants
-    {
+	public class MailConstants
+	{
 		public string PathTemplate { get; set; }
 		public string ReplaceMailTitle { get; set; }
 		public string ReplaceMailBody { get; set; }
@@ -15,5 +15,7 @@ namespace OngProject.Core.Entities
 		public string TitleMailConfirm { get; set; }
 		public string WelcomeMailBody { get; set; }
 		public string MailONG { get; set; }
+		public string ReplyToContact { get; set; }
+		public string TitleMailContact { get; set; }
 	}
 }

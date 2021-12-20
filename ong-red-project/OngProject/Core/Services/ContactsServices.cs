@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using OngProject.Common;
 using OngProject.Core.DTOs;
+using OngProject.Core.Entities;
 using OngProject.Core.Helper.Pagination;
 using OngProject.Core.Interfaces.IServices;
 using OngProject.Core.Mapper;
@@ -36,6 +37,20 @@ namespace OngProject.Core.Services
         {
             return _unitOfWork.ContactsRepository.EntityExists(id);
         }
-        
+        public async Task<ContactDTO> RegisterAsync(ContactDTO contact)
+        {
+            var newContact = new Contacts
+            {
+                Name = contact.Name,
+                Phone = contact.Phone,
+                Email = contact.Email,
+                Message = contact.Message,
+            };
+            var result = await _unitOfWork.ContactsRepository.Insert(newContact);
+            await _unitOfWork.SaveChangesAsync();
+            var mapper = new EntityMapper();
+            return mapper.FromContactsToContactsDto(result);
+        }
+
     }
 }
