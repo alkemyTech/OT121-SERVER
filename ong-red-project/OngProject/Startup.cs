@@ -89,7 +89,6 @@ namespace OngProject
 
             // JWT Token Generator
 
-
             #region JWT Token Generator
 
             services.Configure<JWTSettings>(Configuration.GetSection("JWTSettings"));
@@ -116,20 +115,35 @@ namespace OngProject
 
                 options.Events = new JwtBearerEvents()
                 {
-                    OnAuthenticationFailed = c =>
+                    OnAuthenticationFailed = context =>
                     {
-                        c.NoResult();
-                        c.Response.StatusCode = 500;
-                        c.Response.ContentType = "text/plain";
-                        return c.Response.WriteAsync(c.Exception.ToString());
+                        context.NoResult();
+                        context.Response.StatusCode = 500;
+                        context.Response.ContentType = "application/json";
+
+                        string response = JsonConvert.SerializeObject(new Result().Fail("El token de acceso proporcionado no es válido."));
+                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                        {
+                            context.Response.Headers.Add("Token-Expired", "true");
+                            response = JsonConvert.SerializeObject(new Result().Fail("El token de acceso proporcionado ha expirado."));
+                        }
+
+                        return context.Response.WriteAsync(response);
                     },
                     OnChallenge = context =>
                     {
-                        context.HandleResponse();
-                        context.Response.StatusCode = 401;
-                        context.Response.ContentType = "application/json";
-                        var result = JsonConvert.SerializeObject(new Result().Fail("Usted no esta autorizado."));
-                        return context.Response.WriteAsync(result);
+                        try
+                        {
+                            context.HandleResponse();
+                            context.Response.StatusCode = 401;
+                            context.Response.ContentType = "application/json";
+                            var result = JsonConvert.SerializeObject(new Result().Fail("Usted no esta autorizado."));
+                            return context.Response.WriteAsync(result);
+                        }
+                        catch (Exception ex)
+                        {
+                            return context.Response.WriteAsync("");
+                        }
                     },
                     OnForbidden = context =>
                     {
@@ -142,7 +156,6 @@ namespace OngProject
             });
 
             #endregion JWT Token Generator
-
 
             //AWS S3 Configuration
             services.AddAWSService<IAmazonS3>(Configuration.GetAWSOptions());
