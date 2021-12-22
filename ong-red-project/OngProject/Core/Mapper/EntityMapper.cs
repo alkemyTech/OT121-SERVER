@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using OngProject.Common;
 using OngProject.Core.DTOs;
+using OngProject.Core.DTOs.CategoriesDTOs;
 using OngProject.Core.DTOs.UserDTOs;
 using OngProject.Core.Entities;
 using OngProject.Infrastructure.Repositories;
@@ -165,6 +166,20 @@ namespace OngProject.Core.Mapper
                 Image = activitiesDTO.Image
             };
             return activities;
+        }
+
+        #endregion Activities Mappers
+
+        #region Categories Mappers
+
+        public CategoryGetDTO FromCategoriesToCategoriesDTO(Category category)
+        {
+            return new CategoryGetDTO()
+            {
+                Name = category.Name,
+                Description = category.Description,
+                Image = category.Image
+            };
         }
 
         #endregion Activities Mappers
