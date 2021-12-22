@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OngProject.Common;
 using OngProject.Core.DTOs;
+using OngProject.Core.DTOs.CommentsDTOs;
 using OngProject.Core.Interfaces.IServices;
 using System;
 using System.Collections.Generic;
@@ -16,14 +18,18 @@ namespace OngProject.Controllers
     {
         #region Objects and Constructor
         private readonly ICommentsServices _commentsServices;
-        public CommentsController(ICommentsServices commentsServices)
+        private readonly IUserServices _userServices;
+        private readonly INewsServices _newServices;
+        public CommentsController(ICommentsServices commentsServices, IUserServices userServices, INewsServices newServices)
         {
             _commentsServices = commentsServices;
+            _userServices = userServices;
+            _newServices = newServices;
         }
         #endregion
 
          
-          #region Documentacion
+        #region Documentacion
         /// <summary>
         /// Endpoint para eliminacion de baja logica de un Comentario. Se debe ser ADMINISTRADOR o USUARIO
         /// </summary>
@@ -56,6 +62,30 @@ namespace OngProject.Controllers
             return Ok(await _commentsServices.Delete(id));
         }
 
-       
+        #region Documentacion
+        /// <summary>
+        /// Endpoint para crear un Comentario.
+        /// </summary>
+        /// <response code="200">Se ha creado el comentario correctamente</response>
+        /// <response code="401">Credenciales invalidas</response> 
+        /// <response code="404">No se ha encontrado el dato proporcionado.</response>
+        #endregion
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Create(CommentCreateRequestDTO comments)
+        {
+            var user = await  _userServices.UserExistsById(comments.User_id);
+            if (!user)
+                return NotFound("No existe el usuario proporcionado.");
+
+            var news = await _newServices.NewsExistsById(comments.News_id);
+            if (!news)
+                return NotFound("No existe el post/news proporcionado."); 
+
+            var result = await _commentsServices.CreateAsync(comments);
+
+            return Ok(result);
+        }
     }
 }
