@@ -1,10 +1,13 @@
 ﻿using OngProject.Common;
 using OngProject.Core.DTOs;
+using OngProject.Core.DTOs.CommentsDTOs;
+using OngProject.Core.Entities;
 using OngProject.Core.Helper.Pagination;
 using OngProject.Core.Interfaces.IServices;
 using OngProject.Core.Mapper;
 using OngProject.Infrastructure.Repositories.IRepository;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -17,12 +20,13 @@ namespace OngProject.Core.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUriService _uriService;
+        private readonly EntityMapper _mapper;
         public CommentsServices(IUnitOfWork unitOfWork, IUriService uriService)
         {
             _unitOfWork = unitOfWork;
             _uriService = uriService;
+            _mapper = new EntityMapper();
         }
-
 
         public async Task<Result> Delete(int id)
         {
@@ -41,7 +45,26 @@ namespace OngProject.Core.Services
 
         public bool EntityExists(int id)
         {
-            return _unitOfWork.CommentsRepository.EntityExists(id);
+            var existComment = _unitOfWork.CommentsRepository.GetById(id);
+            if(existComment != null)
+                return true;
+            return false;
+        }
+
+        public async Task<CommentCreateRequestDTO> CreateAsync(CommentCreateRequestDTO comment)
+        {
+            var news = new Comments()
+            {
+                Body = comment.Body,
+                UserId = comment.User_id,
+                NewId = comment.News_id
+            };
+
+            var result = await _unitOfWork.CommentsRepository.Insert(news);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.FromCommentsToCommentsDTO(result);
         }
     }
 }
