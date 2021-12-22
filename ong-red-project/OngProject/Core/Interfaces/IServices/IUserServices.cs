@@ -1,5 +1,6 @@
 using OngProject.Core.DTOs.UserDTOs;
 using OngProject.Core.Entities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OngProject.Core.Interfaces.IServices
@@ -11,5 +12,7 @@ namespace OngProject.Core.Interfaces.IServices
         Task<UserLoginResponseDTO> LoginAsync(UserLoginRequestDTO user);
 
         Task<UserProfileDTO> UserExistsByEmail(string email);
+
+        Task<IEnumerable<User>> GetUsersAllDataAsync();
     }
 }
