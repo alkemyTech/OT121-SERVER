@@ -48,9 +48,11 @@ namespace OngProject.Core.Services
             return new Result().Fail("Ocurrio un error al eliminar el testimonial");
         }
 
-      
-        
-
-       
+        public async Task<string[]> GetCategories(int page)
+        {
+            return
+            (await _unitOfWork.CategoryRepository.GetPageAsync(c => c, 10, page))
+            .Select(c => c.Name).ToArray();
+        }
     }
 }

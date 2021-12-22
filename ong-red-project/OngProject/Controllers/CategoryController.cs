@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using System.Security.Claims;
 namespace OngProject.Controllers
 {
     [Route("[controller]")]
@@ -31,6 +31,27 @@ namespace OngProject.Controllers
                 ? BadRequest(request.Messages)
                 : Ok(request);
         }
-
+        
+        /// <summary>
+        /// Endpoint para obtener los nombres de categorias por pagina como administrador
+        /// </summary>
+        /// <response code="200">Lista de a 10 categorias paginada.</response>
+        /// <response code="404">No se encuentran categorias</response>
+        /// <response code="401">Credenciales no validas</response> 
+        [Authorize(Roles = "Administrator")]
+        [HttpGet]
+        public async Task<ActionResult> GetCategories([FromQuery]int page){
+            var categories = await _CategoriesServices.GetCategories(page);
+            if(categories.Length > 0){
+                return StatusCode(200, categories);
+            }
+            return StatusCode(404, new
+            {
+                Messages = new string[]{
+                    String.Format("No se encuentran categorias en la pagina {0}",page)
+                },
+                HasErrors = false
+            });
+        }
     }
 }
