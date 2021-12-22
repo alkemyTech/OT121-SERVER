@@ -21,7 +21,7 @@ namespace OngProject.Controllers
         }
         #endregion
 
-       
+
         [HttpDelete("{id}")]
         public async Task<ActionResult<Result>> Delete(int id)
         {
@@ -32,5 +32,28 @@ namespace OngProject.Controllers
                 : Ok(request);
         }
 
+        /// <summary>
+        /// Endpoint para obtener los nombres de categorias como administrador
+        /// </summary>
+        /// <response code="200">Lista de todos los nombres de categoria.</response>
+        /// <response code="404">No se encuentran categorias</response>
+        /// <response code="401">Credenciales no validas</response> 
+        [Authorize(Roles = "Administrator")]
+        [HttpGet]
+        public async Task<ActionResult> GetCategories()
+        {
+            var categories = await _CategoriesServices.GetCategories();
+            if (categories.Length > 0)
+            {
+                return StatusCode(200, categories);
+            }
+            return StatusCode(404, new
+            {
+                Messages = new string[]{
+                    String.Format("No se encuentran categorias.}")
+                },
+                HasErrors = false
+            });
+        }
     }
 }
