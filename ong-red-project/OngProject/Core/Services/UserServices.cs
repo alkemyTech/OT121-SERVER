@@ -148,6 +148,13 @@ namespace OngProject.Core.Services
             return response;
         }
 
+        public async Task<bool> UserExistsById(int id)
+        {
+            var result = await _unitOfWork.UsersRepository.GetById(id);
+            if (result != null)
+                return true;
+            return false;
+        }
     }
 
 }
