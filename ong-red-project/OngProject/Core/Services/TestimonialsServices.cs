@@ -1,5 +1,6 @@
 ﻿using OngProject.Common;
 using OngProject.Core.DTOs;
+using OngProject.Core.DTOs.TestimonialsDTOs;
 using OngProject.Core.Entities;
 using OngProject.Core.Helper.Pagination;
 using OngProject.Core.Helper.S3;
@@ -28,6 +29,27 @@ namespace OngProject.Core.Services
             _imageServices = imageServices;
             _mapper = new EntityMapper();
         }
-       
+
+        public async Task<Result> CreateAsync(TestimonialsCreateDTO testimonialsCreate)
+        {
+            var newRecord = new Testimonials
+            {
+                Name = testimonialsCreate.Name,
+                Content = testimonialsCreate.Content
+            };
+
+            if (testimonialsCreate.Image != null)
+            {
+                string img = await _imageServices.SaveImageAsync(testimonialsCreate.Image);
+
+                newRecord.Image = img;
+            }
+
+            await _unitOfWork.TestimonialsRepository.Insert(newRecord);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return new Result().Success("Datos guardados satisfactoriamente.");
+        }
     }
 }
