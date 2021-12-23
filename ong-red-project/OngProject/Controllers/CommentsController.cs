@@ -123,7 +123,7 @@ namespace OngProject.Controllers
         /// <response code="401">Credenciales no validas</response> 
         [Authorize(Roles = "Administrator")]
         [HttpGet]
-        public async Task<ActionResult> GetCategories()
+        public async Task<ActionResult> GetComments()
         {
             var comments = await _commentsServices.GetComments();
 
