@@ -155,6 +155,13 @@ namespace OngProject.Core.Services
                 return true;
             return false;
         }
+
+        #region Get all data from all users
+        public async Task<IEnumerable<User>> GetUsersAllDataAsync()
+        {
+            return await _unitOfWork.UsersRepository.FindByCondition(x => x.Id > 0, y => y.Role);
+        }
+        #endregion
     }
 
 }
