@@ -55,5 +55,16 @@ namespace OngProject.Controllers
                 HasErrors = false
             });
         }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Result>> Get(int id)
+        {
+            var category = await _CategoriesServices.Get(id);
+            return category != null ? Ok(category) : NotFound();
+        }
+
+
+
     }
 }

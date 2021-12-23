@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using OngProject.Common;
 using OngProject.Core.DTOs;
+using OngProject.Core.DTOs.CategoriesDTOs;
 using OngProject.Core.DTOs.CommentsDTOs;
 using OngProject.Core.DTOs.UserDTOs;
 using OngProject.Core.Entities;
@@ -182,5 +183,18 @@ namespace OngProject.Core.Mapper
             };
         }
         #endregion Comments Mappers
+
+        #region Categories Mappers
+        public CategoryGetDTO FromCategoriesToCategoriesDTO(Category category) {
+
+            return new CategoryGetDTO()
+            {
+                Name = category.Name,
+                Description = category.Description,
+                Image = category.Image
+            };
+
+        }
+        #endregion Categories Mappers
     }
 }

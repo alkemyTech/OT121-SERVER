@@ -1,5 +1,6 @@
 ﻿using OngProject.Common;
 using OngProject.Core.DTOs;
+using OngProject.Core.DTOs.CategoriesDTOs;
 using OngProject.Core.Entities;
 using OngProject.Core.Helper.Pagination;
 using OngProject.Core.Interfaces.IServices;
@@ -17,12 +18,13 @@ namespace OngProject.Core.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IImageService _imageServices;
+        private readonly EntityMapper _entityMapper;
 
         public CategoriesServices(IUnitOfWork unitOfWork, IImageService imageServices)
         {
             _unitOfWork = unitOfWork;
             _imageServices = imageServices;
-
+            _entityMapper = new EntityMapper();
         }
 
         public bool EntityExist(int id)
@@ -54,7 +56,10 @@ namespace OngProject.Core.Services
             .Select(c => c.Name).ToArray();
         }
 
-
-
+        public async Task<CategoryGetDTO> Get(int id)
+        {
+            var category = await _unitOfWork.CategoryRepository.GetById(id);
+            return category != null ? _entityMapper.FromCategoriesToCategoriesDTO(category) : null;
+        }
     }
 }
