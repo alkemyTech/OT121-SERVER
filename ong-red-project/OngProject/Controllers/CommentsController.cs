@@ -115,5 +115,20 @@ namespace OngProject.Controllers
                 ? BadRequest(result.Messages)
                 : Ok(result);
         }
+
+        /// <summary>
+        /// Endpoint para obtener los comentarios.Siendo administrador
+        /// </summary>
+        /// <response code="200">Lista de todos los comentarios.</response>
+        /// <response code="401">Credenciales no validas</response> 
+        [Authorize(Roles = "Administrator")]
+        [HttpGet]
+        public async Task<ActionResult> GetCategories()
+        {
+            var comments = await _commentsServices.GetComments();
+
+            return Ok(comments);
+        }
+
     }
 }
