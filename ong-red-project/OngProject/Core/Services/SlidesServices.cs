@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using OngProject.Common;
 using OngProject.Core.DTOs;
+using OngProject.Core.DTOs.SlidesDTOs;
 using OngProject.Core.Entities;
 using OngProject.Core.Helper.FomFileData;
 using OngProject.Core.Helper.S3;
@@ -20,10 +21,14 @@ namespace OngProject.Core.Services
         #region Object and Constructor
         private readonly IUnitOfWork _unitOfWork;
         private readonly IImageService _imageServices;
+
+        private readonly EntityMapper _mapper;
+
         public SlidesServices(IUnitOfWork unitOfWork, IImageService imageServices)
         {
             _unitOfWork = unitOfWork;
             _imageServices = imageServices;
+            _mapper = new EntityMapper();
         } 
         #endregion
 
@@ -33,6 +38,16 @@ namespace OngProject.Core.Services
             return _unitOfWork.SlidesRepository.EntityExists(id);
         }
         
+        
+
+        public async Task<List<SlideDataShortResponse>> GetListOfSlides()
+        {
+            var slidesList = await _unitOfWork.SlidesRepository.GetAll();
+
+            var slides = slidesList.Select(s => _mapper.FromSlidesToSlidesShortResponseDTO(s)).ToList();
+
+            return slides;
+        }
 
     }
 }
