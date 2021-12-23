@@ -28,7 +28,7 @@ namespace OngProject.Controllers
         }
         #endregion
 
-         
+
         #region Documentacion
         /// <summary>
         /// Endpoint para eliminacion de baja logica de un Comentario. Se debe ser ADMINISTRADOR o USUARIO
@@ -75,17 +75,45 @@ namespace OngProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CommentCreateRequestDTO comments)
         {
-            var user = await  _userServices.UserExistsById(comments.User_id);
+            var user = await _userServices.UserExistsById(comments.User_id);
             if (!user)
                 return NotFound("No existe el usuario proporcionado.");
 
             var news = await _newServices.NewsExistsById(comments.News_id);
             if (!news)
-                return NotFound("No existe el post/news proporcionado."); 
+                return NotFound("No existe el post/news proporcionado.");
 
             var result = await _commentsServices.CreateAsync(comments);
 
             return Ok(result);
+        }
+
+        #region Documentacion
+        /// <summary>
+        /// Endpoint para editar un Comentario si corresponde al usuario propietario. Siendo Usuario o Administrador.
+        /// </summary>
+        /// <response code="200">Se ha actualizado el comentario correctamente.</response>
+        /// <response code="401">Credenciales invalidas.</response> 
+        /// <response code="403">Usuario estándar no autorizado.</response> 
+        /// <response code="404">No se ha encontrado el dato proporcionado.</response>
+        #endregion
+        [Authorize]
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Result>> Update(CommentUpdateDTO comments, int id)
+        {
+            var commentId = _commentsServices.EntityExists(id);
+            if (!commentId)
+                return NotFound();
+
+            var userIndentity = await _commentsServices.ValidateCreatorOrAdmin(User, id);
+            if (!userIndentity)
+                return StatusCode(403);
+
+            var result = await _commentsServices.UpdateAsync(comments, id);
+
+            return result.HasErrors
+                ? BadRequest(result.Messages)
+                : Ok(result);
         }
     }
 }
