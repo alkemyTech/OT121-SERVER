@@ -7,11 +7,11 @@ using OngProject.Core.Interfaces.IServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace OngProject.Controllers
 {
-
     [Route("[controller]")]
     [ApiController]
     public class CommentsController : ControllerBase
@@ -28,7 +28,7 @@ namespace OngProject.Controllers
         }
         #endregion
 
-         
+
         #region Documentacion
         /// <summary>
         /// Endpoint para eliminacion de baja logica de un Comentario. Se debe ser ADMINISTRADOR o USUARIO
@@ -48,7 +48,6 @@ namespace OngProject.Controllers
         /// <response code="200">Se ha eliminado al comentario correctamente</response>
         /// <response code="401">Credenciales invalidas</response> 
         #endregion
-
         [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
@@ -70,7 +69,6 @@ namespace OngProject.Controllers
         /// <response code="401">Credenciales invalidas</response> 
         /// <response code="404">No se ha encontrado el dato proporcionado.</response>
         #endregion
-
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(CommentCreateRequestDTO comments)
@@ -86,6 +84,34 @@ namespace OngProject.Controllers
             var result = await _commentsServices.CreateAsync(comments);
 
             return Ok(result);
+        }
+
+        #region Documentacion
+        /// <summary>
+        /// Endpoint para editar un Comentario si corresponde al usuario propietario. Siendo Usuario o Administrador.
+        /// </summary>
+        /// <response code="200">Se ha actualizado el comentario correctamente.</response>
+        /// <response code="401">Credenciales invalidas.</response> 
+        /// <response code="403">Usuario estándar no autorizado.</response> 
+        /// <response code="404">No se ha encontrado el dato proporcionado.</response>
+        #endregion
+        [Authorize]
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Result>> Update(CommentUpdateDTO comments, int id)
+        {
+            var commentId =  _commentsServices.EntityExists(id);
+            if (!commentId)
+                return NotFound();
+
+            var userIndentity = await _commentsServices.ValidateCreatorOrAdmin(User, id);
+            if (!userIndentity)
+                return StatusCode(403);
+
+            var result = await _commentsServices.UpdateAsync(comments, id);
+
+            return result.HasErrors
+                ? BadRequest(result.Messages)
+                : Ok(result);
         }
     }
 }
