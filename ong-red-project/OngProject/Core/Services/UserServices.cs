@@ -109,7 +109,7 @@ namespace OngProject.Core.Services
             {
                 new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("Role", user.Role.Name),
+                new Claim(ClaimTypes.Role, user.Role.Name),
                 new Claim("Password", user.Password),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
