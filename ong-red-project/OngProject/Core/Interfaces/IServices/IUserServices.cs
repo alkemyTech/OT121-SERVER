@@ -7,9 +7,8 @@ namespace OngProject.Core.Interfaces.IServices
     public interface IUserServices
     {
         Task<UserRegistrationDTO> RegisterAsync(UserRegistrationDTO user);
-
         Task<UserLoginResponseDTO> LoginAsync(UserLoginRequestDTO user);
-
         Task<UserProfileDTO> UserExistsByEmail(string email);
+        Task<bool> UserExistsById(int id);
     }
 }

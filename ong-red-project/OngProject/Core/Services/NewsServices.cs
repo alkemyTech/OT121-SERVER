@@ -27,5 +27,12 @@ namespace OngProject.Core.Services
             _entityMapper = new EntityMapper();
         }
 
+        public async Task<bool> NewsExistsById(int id)
+        {
+            var existsNews = await _unitOfWork.NewsRepository.GetById(id);
+            if (existsNews != null)
+                return true;
+            return false;
+        }
     }
 }

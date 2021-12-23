@@ -10,5 +10,6 @@ namespace OngProject.Core.Interfaces.IServices
 {
     public interface INewsServices
     {
+        Task<bool> NewsExistsById(int id);
     }
 }
