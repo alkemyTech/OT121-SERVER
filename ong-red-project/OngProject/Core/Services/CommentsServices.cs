@@ -48,20 +48,33 @@ namespace OngProject.Core.Services
             return _unitOfWork.CommentsRepository.EntityExists(id);
         }
 
-        public async Task<CommentCreateRequestDTO> CreateAsync(CommentCreateRequestDTO comment)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public async Task<Result> UpdateAsync(CommentUpdateDTO comment, int id)
         {
-            var news = new Comments()
-            {
-                Body = comment.Body,
-                UserId = comment.User_id,
-                NewId = comment.News_id
-            };
+            var comments = await _unitOfWork.CommentsRepository.GetById(id);
+            comments.Body = comment.Body;
 
-            var result = await _unitOfWork.CommentsRepository.Insert(news);
-
+            var result = await _unitOfWork.CommentsRepository.Update(comments);
             await _unitOfWork.SaveChangesAsync();
 
-            return _mapper.FromCommentsToCommentsDTO(result);
+            if (result != null)
+                return new Result().Success("Comentario actualizado con éxito.");
+
+            return new Result().Fail("Ocurrio un error al actualizar el comentario.");
         }
     }
 }
