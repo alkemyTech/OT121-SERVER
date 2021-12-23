@@ -5,6 +5,7 @@ using OngProject.Common;
 using OngProject.Core.DTOs;
 using OngProject.Core.DTOs.CategoriesDTOs;
 using OngProject.Core.DTOs.CommentsDTOs;
+using OngProject.Core.DTOs.SlidesDTOs;
 using OngProject.Core.DTOs.UserDTOs;
 using OngProject.Core.Entities;
 using OngProject.Infrastructure.Repositories;
@@ -196,5 +197,20 @@ namespace OngProject.Core.Mapper
 
         }
         #endregion Categories Mappers
+
+        #region Slides Mappers        
+    
+        public SlideDataShortResponse FromSlidesToSlidesShortResponseDTO(Slides slide){
+            var result = new SlideDataShortResponse(){
+                Id = slide.Id,
+                ImageUrl = slide.ImageUrl,
+                Text = slide.Text,
+                Order = slide.Order
+            };
+            return result;
+        }
+
+        #endregion Slides Mappers
+
     }
 }
