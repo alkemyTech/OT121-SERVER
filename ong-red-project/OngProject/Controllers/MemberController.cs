@@ -32,7 +32,7 @@ namespace OngProject.Controllers
         /// Endpoint para listar los miembros.
         /// </summary>
         /// <response code="200">Tarea ejecutada con exito devuelve la lista de miembros.</response>
-        /// <response code="400">No se encontraron datos para mostrar u otros errores.</response>
+        /// <response code="404">No se encontraron datos para mostrar.</response>
 
         #endregion Documentation
 
@@ -45,7 +45,7 @@ namespace OngProject.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return NotFound(e.Message);
             }
         }
     }
