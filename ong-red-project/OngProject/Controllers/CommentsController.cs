@@ -61,30 +61,30 @@ namespace OngProject.Controllers
             return Ok(await _commentsServices.Delete(id));
         }
 
-        #region Documentacion
-        /// <summary>
-        /// Endpoint para crear un Comentario.
-        /// </summary>
-        /// <response code="200">Se ha creado el comentario correctamente</response>
-        /// <response code="401">Credenciales invalidas</response> 
-        /// <response code="404">No se ha encontrado el dato proporcionado.</response>
-        #endregion
-        [Authorize]
-        [HttpPost]
-        public async Task<IActionResult> Create(CommentCreateRequestDTO comments)
-        {
-            var user = await  _userServices.UserExistsById(comments.User_id);
-            if (!user)
-                return NotFound("No existe el usuario proporcionado.");
 
-            var news = await _newServices.NewsExistsById(comments.News_id);
-            if (!news)
-                return NotFound("No existe el post/news proporcionado."); 
 
-            var result = await _commentsServices.CreateAsync(comments);
 
-            return Ok(result);
-        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         #region Documentacion
         /// <summary>
