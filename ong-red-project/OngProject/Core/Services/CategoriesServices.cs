@@ -17,12 +17,12 @@ namespace OngProject.Core.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IImageService _imageServices;
-        
+
         public CategoriesServices(IUnitOfWork unitOfWork, IImageService imageServices)
         {
             _unitOfWork = unitOfWork;
             _imageServices = imageServices;
-            
+
         }
 
         public bool EntityExist(int id)
@@ -48,9 +48,13 @@ namespace OngProject.Core.Services
             return new Result().Fail("Ocurrio un error al eliminar el testimonial");
         }
 
-      
-        
+        public async Task<string[]> GetCategories()
+        {
+            return (await _unitOfWork.CategoryRepository.GetAll())
+            .Select(c => c.Name).ToArray();
+        }
 
-       
+
+
     }
 }
