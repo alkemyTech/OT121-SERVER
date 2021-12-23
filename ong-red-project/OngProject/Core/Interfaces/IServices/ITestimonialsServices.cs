@@ -7,5 +7,7 @@ namespace OngProject.Core.Interfaces.IServices
     public interface ITestimonialsServices
     {
         Task<Result> CreateAsync(TestimonialsCreateDTO testimonialsCreate);
+
+        Task<Result> UpdateAsync(TestimonialsUpdateDTO testimonialsUpdate);
     }
 }
