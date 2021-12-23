@@ -45,10 +45,7 @@ namespace OngProject.Core.Services
 
         public bool EntityExists(int id)
         {
-            var existComment = _unitOfWork.CommentsRepository.GetById(id);
-            if(existComment != null)
-                return true;
-            return false;
+            return _unitOfWork.CommentsRepository.EntityExists(id);
         }
 
         public async Task<CommentCreateRequestDTO> CreateAsync(CommentCreateRequestDTO comment)
