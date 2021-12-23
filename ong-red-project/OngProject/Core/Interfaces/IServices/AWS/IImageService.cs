@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using OngProject.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace OngProject.Core.Interfaces.IServices.AWS
 {
     public interface IImageService
     {
-        Task<string> SaveImageAsync(IFormFile file);
-        string GetImageUrl(string imageName);
+        Task<Result> Save(string fileName, IFormFile image);
+        Task<bool> Delete(string name);
     }
 }

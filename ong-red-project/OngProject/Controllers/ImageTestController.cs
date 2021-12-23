@@ -18,17 +18,9 @@ namespace OngProject.Controllers
         }
 
         [HttpPost("image")]
-        public async Task<IActionResult> ImageAsync(IFormFile file) // [FromForm] 
+        public async Task<IActionResult> ImageAsync(IFormFile file) 
         {
-            var request = await _imageService.SaveImageAsync(file);
-
-            return Ok(request);
-        }
-
-        [HttpGet("getimage")]
-        public ActionResult GetUrl(string namefile)
-        {
-            var request = _imageService.GetImageUrl(namefile);
+            var request = await _imageService.Save(file.FileName, file);
 
             return Ok(request);
         }
