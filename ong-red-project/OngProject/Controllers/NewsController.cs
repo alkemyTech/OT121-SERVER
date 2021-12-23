@@ -18,6 +18,21 @@ namespace OngProject.Controllers
         {
             _newsServices = newsServices;
         }
-        
+
+        #region Documentacion
+        /// <summary>
+        /// Endpoint para obtener todos los datos de News por Id
+        /// </summary>
+        /// <response code="200">Solicitud concretada con exito</response>
+        /// <response code="404">No encontrado</response> 
+        #endregion
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAsync(int id)
+        {
+            var news = await _newsServices.GetAllDataByIdAsync(id);
+            if (news == null)
+                return NotFound();
+            return Ok(news);
+        }
     }
 }
