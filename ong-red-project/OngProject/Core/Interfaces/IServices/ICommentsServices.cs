@@ -17,8 +17,8 @@ namespace OngProject.Core.Interfaces.IServices
         Task<Result> Delete(int id);
         Task<bool> ValidateCreatorOrAdmin(ClaimsPrincipal user, int id);
         public bool EntityExists(int id);
-        Task<CommentCreateRequestDTO> CreateAsync(CommentCreateRequestDTO comment);
 
+        
         Task<Result> UpdateAsync(CommentUpdateDTO comment, int id);
     }
 }
