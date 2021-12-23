@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using OngProject.Common;
 using OngProject.Core.DTOs;
+using OngProject.Core.DTOs.CommentsDTOs;
 using OngProject.Core.DTOs.UserDTOs;
 using OngProject.Core.Entities;
 using OngProject.Infrastructure.Repositories;
@@ -168,5 +169,18 @@ namespace OngProject.Core.Mapper
         }
 
         #endregion Activities Mappers
+
+
+        #region Comments Mappers
+        public CommentCreateRequestDTO FromCommentsToCommentsDTO(Comments comments)
+        {
+            return new CommentCreateRequestDTO()
+            {
+                User_id = comments.UserId,
+                Body = comments.Body,
+                News_id = comments.NewId
+            };
+        }
+        #endregion Comments Mappers
     }
 }

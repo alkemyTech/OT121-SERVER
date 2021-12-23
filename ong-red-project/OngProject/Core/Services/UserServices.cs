@@ -109,7 +109,7 @@ namespace OngProject.Core.Services
             {
                 new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("Role", user.Role.Name),
+                new Claim(ClaimTypes.Role, user.Role.Name),
                 new Claim("Password", user.Password),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
@@ -148,12 +148,14 @@ namespace OngProject.Core.Services
             return response;
         }
 
+
         #region Get all data from all users
         public async Task<IEnumerable<User>> GetUsersAllDataAsync()
         {
             return await _unitOfWork.UsersRepository.FindByCondition(x => x.Id > 0, y => y.Role);
         }
         #endregion
+
     }
 
 }
