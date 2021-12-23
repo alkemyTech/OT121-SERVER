@@ -147,7 +147,7 @@ namespace OngProject
                     },
                     OnForbidden = context =>
                     {
-                        context.Response.StatusCode = 400;
+                        context.Response.StatusCode = 403;
                         context.Response.ContentType = "application/json";
                         var result = JsonConvert.SerializeObject(new Result().Fail("Usted no posee permisos sobre este recurso."));
                         return context.Response.WriteAsync(result);
