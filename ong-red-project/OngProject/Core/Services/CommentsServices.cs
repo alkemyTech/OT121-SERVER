@@ -45,10 +45,7 @@ namespace OngProject.Core.Services
 
         public bool EntityExists(int id)
         {
-            var existComment = _unitOfWork.CommentsRepository.GetById(id);
-            if(existComment != null)
-                return true;
-            return false;
+            return _unitOfWork.CommentsRepository.EntityExists(id); 
         }
 
         public async Task<CommentCreateRequestDTO> CreateAsync(CommentCreateRequestDTO comment)
@@ -59,12 +56,25 @@ namespace OngProject.Core.Services
                 UserId = comment.User_id,
                 NewId = comment.News_id
             };
-
             var result = await _unitOfWork.CommentsRepository.Insert(news);
 
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.FromCommentsToCommentsDTO(result);
+        }
+
+        public async Task<Result> UpdateAsync(CommentUpdateDTO comment, int id)
+        {
+            var comments = await _unitOfWork.CommentsRepository.GetById(id);
+            comments.Body = comment.Body;
+
+            var result = await _unitOfWork.CommentsRepository.Update(comments);
+            await _unitOfWork.SaveChangesAsync();
+
+            if (result != null)
+                return new Result().Success("Comentario actualizado con éxito.");
+
+            return new Result().Fail("Ocurrio un error al actualizar el comentario.");
         }
     }
 }
