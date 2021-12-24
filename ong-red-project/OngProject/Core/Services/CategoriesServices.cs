@@ -61,5 +61,42 @@ namespace OngProject.Core.Services
             var category = await _unitOfWork.CategoryRepository.GetById(id);
             return category != null ? _entityMapper.FromCategoriesToCategoriesDTO(category) : null;
         }
+
+        public async Task<bool> ExistsByName(CategoryInsertDTO category){
+            var exists = await _unitOfWork.CategoryRepository.FindByCondition(c => c.Name == category.Name);
+            if (exists != null)
+            {
+                if (exists.FirstOrDefault() != null)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public async Task<CategoryGetDTO> Insert(CategoryInsertDTO category)
+        {
+            
+            CategoryGetDTO  categoryGetDTO = null;
+            string imageUrl = String.Empty,
+                  imageName = category.Image != null ? category.Image.Name : String.Empty;
+
+            try{
+
+                if (imageName != String.Empty)
+                {
+                    await _imageServices.SaveImageAsync(category.Image);
+                    imageUrl = _imageServices.GetImageUrl(imageName);
+                }
+                categoryGetDTO = _entityMapper.FromCategoryInsertDTOToCategoryGetDTO(category, imageUrl);
+                Category newCategory = _entityMapper.FromCategoryGetDTOToCategory(categoryGetDTO);
+                await _unitOfWork.CategoryRepository.Insert(newCategory);
+                await _unitOfWork.SaveChangesAsync();
+            }catch(Exception e){
+                return null;
+            }
+            
+            return categoryGetDTO;
+        }
     }
 }
