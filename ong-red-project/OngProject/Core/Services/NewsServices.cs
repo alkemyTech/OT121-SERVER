@@ -34,5 +34,13 @@ namespace OngProject.Core.Services
                 return true;
             return false;
         }
+
+        #region Get all data from news by Id
+        public async Task<News> GetAllDataByIdAsync(int id)
+        {
+            var news = await _unitOfWork.NewsRepository.FindByCondition(x => x.Id == id, y => y.Category);
+            return news.FirstOrDefault();
+        }
+        #endregion
     }
 }
