@@ -76,5 +76,11 @@ namespace OngProject.Core.Services
 
             return new Result().Fail("Ocurrio un error al actualizar el comentario.");
         }
+
+        public async Task<string[]> GetComments()
+        {
+            return (await _unitOfWork.CommentsRepository.GetAll())
+                .OrderByDescending(f => f.CreatedAt).Select(c => c.Body).ToArray();
+        }
     }
 }

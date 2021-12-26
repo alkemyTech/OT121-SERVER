@@ -18,5 +18,6 @@ namespace OngProject.Core.Interfaces.IServices
         public bool EntityExists(int id);
         Task<CommentCreateRequestDTO> CreateAsync(CommentCreateRequestDTO comment);
         Task<Result> UpdateAsync(CommentUpdateDTO comment, int id);
+        Task<string[]> GetComments();
     }
 }
