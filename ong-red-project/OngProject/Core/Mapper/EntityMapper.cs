@@ -196,6 +196,25 @@ namespace OngProject.Core.Mapper
             };
 
         }
+
+        public CategoryGetDTO FromCategoryInsertDTOToCategoryGetDTO(CategoryInsertDTO category, string imageUrl){
+            return new CategoryGetDTO()
+            {
+                Name = category.Name,
+                Description = category.Description,
+                Image = imageUrl
+            };
+        }
+
+        public Category FromCategoryGetDTOToCategory(CategoryGetDTO category){
+            return new Category()
+            {
+                Name = category.Name,
+                Description = category.Description,
+                Image = category.Image
+            };
+        }
+
         #endregion Categories Mappers
 
         #region Slides Mappers        
