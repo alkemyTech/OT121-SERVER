@@ -1,63 +1,58 @@
-﻿using Amazon;
-using Amazon.S3;
-using Amazon.S3.Model;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
+using OngProject.Common;
+using OngProject.Core.Helper.Common;
 using OngProject.Core.Helper.S3;
 using OngProject.Core.Interfaces.IServices.AWS;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OngProject.Core.Services.AWS
 {
     public class ImageService : IImageService
     {
-        #region Object and Constructor
-        private IAmazonS3 _amazonS3;
-        public ImageService(IAmazonS3 amazonS3)
+        private S3AwsHelper _s3AwsHelper;
+        public ImageService(IOptions<AWSSettings> aWSSettings)
         {
-            _amazonS3 = amazonS3;
+            _s3AwsHelper = new S3AwsHelper( aWSSettings);
         }
-        #endregion
-        public async Task<string> SaveImageAsync(IFormFile file)
+        public async Task<bool> Delete(string name)
         {
-
-            try
+            if (string.IsNullOrEmpty(name))
             {
-                var putRequest = new PutObjectRequest()
-                {
-                    BucketName = "", // Bucket pendiente por definir
-                    Key = file.FileName,
-                    InputStream = file.OpenReadStream(),
-                    ContentType = file.ContentType
-                };
-                await _amazonS3.PutObjectAsync(putRequest);
-
-                return "Carga realizada correctamente";
+                return false;
             }
-            catch (Exception ex)
+            else
             {
-                return ex.Message;
+                string nameImage = _s3AwsHelper.GetKeyFromUrl(name);
+                AwsManagerResponse responseAws = await _s3AwsHelper.AwsFileDelete(nameImage);
+                if (!String.IsNullOrEmpty(responseAws.Errors))
+                    return false;
+                return true;
             }
-
         }
-        public string GetImageUrl(string imageName)
-        {
-            try
-            {
-                GetPreSignedUrlRequest request = new GetPreSignedUrlRequest
-                {
-                    BucketName = "",
-                    Key = imageName,
-                    Expires = DateTime.Now.AddDays(30)
-                };
-                string path = _amazonS3.GetPreSignedURL(request);
 
-                return path;
-            }catch(Exception ex)
+        public async Task<Result> Save(string fileName, IFormFile image)
+        {
+            AwsManagerResponse responseAws;
+            if (image != null)
             {
-                return ex.Message;
+                if (ValidateFiles.ValidateImage(image))
+                {
+                    responseAws = await _s3AwsHelper.AwsUploadFile(fileName, image);
+                    if (!String.IsNullOrEmpty(responseAws.Errors))
+                    {
+                        return new Result().Fail("Error al guardar imagen. Detalle:" + responseAws.Errors);
+                    }
+                    return new Result().Success(responseAws.Url);
+                }
+                else
+                    return new Result().Fail("Extensión de imagen no válida. Debe ser jpg, png o jpeg.");
             }
+            else
+                return new Result().NotFound();
         }
     }
 }

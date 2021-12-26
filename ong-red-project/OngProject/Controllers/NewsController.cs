@@ -19,13 +19,12 @@ namespace OngProject.Controllers
             _newsServices = newsServices;
         }
 
-
         #region Documentacion
         /// <summary>
         /// Endpoint para listar los comentarios pertenecientes a un post. 
         /// </summary>
         /// <response code="200">Listado de todos los comentarios pertenecientes a un post .</response>
-        /// <response code="401">Credenciales inválidas.</response> 
+        /// <response code="401">Credenciales invalidas.</response> 
         /// <response code="404">No se ha encontrado el dato proporcionado.</response>
         #endregion
         [Authorize]
@@ -38,6 +37,20 @@ namespace OngProject.Controllers
             return Ok(result);
         }
 
-
+        #region Documentacion
+        /// <summary>
+        /// Endpoint para obtener todos los datos de News por Id
+        /// </summary>
+        /// <response code="200">Solicitud concretada con exito</response>
+        /// <response code="404">No encontrado</response> 
+        #endregion
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAsync(int id)
+        {
+            var news = await _newsServices.GetAllDataByIdAsync(id);
+            if (news == null)
+                return NotFound();
+            return Ok(news);
+        }
     }
 }

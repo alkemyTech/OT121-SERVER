@@ -34,7 +34,6 @@ namespace OngProject.Core.Services
                 return true;
             return false;
         }
-
         public async Task<Comments[]> GetAllCommentsByNews(int id)
         {
             var news = _unitOfWork.NewsRepository.EntityExists(id);
@@ -44,5 +43,12 @@ namespace OngProject.Core.Services
             return (await _unitOfWork.CommentsRepository.GetAll())
                 .Where(n => n.NewId == id).ToArray();
         }
+        #region Get all data from news by Id
+        public async Task<News> GetAllDataByIdAsync(int id)
+        {
+            var news = await _unitOfWork.NewsRepository.FindByCondition(x => x.Id == id, y => y.Category);
+            return news.FirstOrDefault();
+        }
+        #endregion
     }
 }

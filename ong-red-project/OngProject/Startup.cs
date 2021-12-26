@@ -147,7 +147,7 @@ namespace OngProject
                     },
                     OnForbidden = context =>
                     {
-                        context.Response.StatusCode = 400;
+                        context.Response.StatusCode = 403;
                         context.Response.ContentType = "application/json";
                         var result = JsonConvert.SerializeObject(new Result().Fail("Usted no posee permisos sobre este recurso."));
                         return context.Response.WriteAsync(result);
@@ -158,7 +158,8 @@ namespace OngProject
             #endregion JWT Token Generator
 
             //AWS S3 Configuration
-            services.AddAWSService<IAmazonS3>(Configuration.GetAWSOptions());
+            services.Configure<AWSSettings>(Configuration.GetSection("AWSSettings"));
+            services.AddAWSService<IAmazonS3>();
 
             // Add Services
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));

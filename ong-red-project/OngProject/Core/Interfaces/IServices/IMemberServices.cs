@@ -11,6 +11,6 @@ namespace OngProject.Core.Interfaces.IServices
 {
     public interface IMemberServices
     {
-
+        Task<List<MembersDTO>> GetAllAsync();
     }
 }

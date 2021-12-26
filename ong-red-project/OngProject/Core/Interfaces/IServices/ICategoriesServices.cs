@@ -9,5 +9,7 @@ namespace OngProject.Core.Interfaces.IServices
         Task<Result> Delete(int id);
         Task<string[]> GetCategories();
         Task<CategoryGetDTO> Get(int id);
+        Task<bool> ExistsByName(CategoryInsertDTO category);
+        Task<CategoryGetDTO> Insert(CategoryInsertDTO category);
     }
 }
