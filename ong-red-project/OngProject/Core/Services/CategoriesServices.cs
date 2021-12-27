@@ -102,5 +102,37 @@ namespace OngProject.Core.Services
             
             return categoryGetDTO;
         }
+
+        public async Task<Category> FindById(Int32 id)
+        {
+            return await _unitOfWork.CategoryRepository.GetById(id);
+        }
+
+        public async Task<Category> Update(CategoryUpdateDTO categoryInfo, Int32 id)
+        {
+            Category category = await FindById(id);
+            if (category != null)
+            {
+
+                string imageUrl = String.Empty;
+                if (categoryInfo.Image != null)
+                {
+                    Result savedImage = await _imageServices.Save(categoryInfo.Image.FileName, categoryInfo.Image);
+                    if (savedImage.HasErrors)
+                    {
+                        return null;
+                    }
+                    imageUrl = savedImage.Messages[0];
+                }
+
+                category = _entityMapper.FromCategoryUpdateDTOToCategory(categoryInfo, category, imageUrl);
+                Result result = await _unitOfWork.CategoryRepository.Update(category);
+                if(!result.HasErrors){
+                    await _unitOfWork.SaveChangesAsync();
+                }
+                return result.HasErrors ? null : category;
+            }
+            return null;
+        }
     }
 }
