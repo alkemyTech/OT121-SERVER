@@ -85,8 +85,12 @@ namespace OngProject.Core.Services
 
                 if (imageName != String.Empty)
                 {
-                    await _imageServices.SaveImageAsync(category.Image);
-                    imageUrl = _imageServices.GetImageUrl(imageName);
+                    Result res = await _imageServices.Save(category.Image.FileName, category.Image);
+                    if(!res.Messages[0].StartsWith("https")){
+                        return null;
+                    }else{
+                        imageUrl = res.Messages[0];
+                    }
                 }
                 categoryGetDTO = _entityMapper.FromCategoryInsertDTOToCategoryGetDTO(category, imageUrl);
                 Category newCategory = _entityMapper.FromCategoryGetDTOToCategory(categoryGetDTO);
