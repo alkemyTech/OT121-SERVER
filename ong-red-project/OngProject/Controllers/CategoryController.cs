@@ -88,5 +88,19 @@ namespace OngProject.Controllers
             var category = await _CategoriesServices.Insert(newCategory);
             return category != null ? StatusCode(201, category) : StatusCode(500, new Result().Fail("No se logro crear. Problemas del servidor"));
         }
+
+        /// <summary>
+        /// Endpoint para editar una categoria como administrador
+        /// </summary>
+        /// <response code="200">Categoria editada exitosamente.</response>
+        /// <response code="404">No se encontro la categoria.</response>
+        /// <response code="401">Usted no esta autorizado.</response>
+        [Authorize(Roles = "Administrator")]
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Update([FromForm] CategoryUpdateDTO newCategoryInfo, int id)
+        {
+            var updatedCategory = await _CategoriesServices.Update(newCategoryInfo, id);
+            return updatedCategory != null ? Ok(new Result().Success($"Categoria {id} modificada exitosamente.")) : StatusCode(404, new Result().Fail($"No se encontro la categoria con id {id}."));
+        }
     }
 }

@@ -206,6 +206,14 @@ namespace OngProject.Core.Mapper
             };
         }
 
+        public Category FromCategoryUpdateDTOToCategory(CategoryUpdateDTO newCategory, Category oldCategory, string imageUrl)
+        {
+            oldCategory.Name = newCategory.Name != null && newCategory.Name != String.Empty ? newCategory.Name : oldCategory.Name;
+            oldCategory.Description = newCategory.Description != String.Empty && newCategory.Description != null ? newCategory.Description : oldCategory.Description;
+            oldCategory.Image = imageUrl != String.Empty && imageUrl != null ? imageUrl : oldCategory.Image;
+            return oldCategory;
+        }
+
         public Category FromCategoryGetDTOToCategory(CategoryGetDTO category){
             return new Category()
             {
