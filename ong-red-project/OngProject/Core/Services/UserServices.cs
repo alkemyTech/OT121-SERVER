@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
@@ -160,6 +161,29 @@ namespace OngProject.Core.Services
         public async Task<IEnumerable<User>> GetUsersAllDataAsync()
         {
             return await _unitOfWork.UsersRepository.FindByCondition(x => x.Id > 0, y => y.Role);
+        }
+        #endregion
+
+        #region Update user by id with jsonPatch
+        public async Task<User> UpdatePatchAsync(int id, JsonPatchDocument patch)
+        {
+            var user = await _unitOfWork.UsersRepository.GetById(id);
+            if (user != null)
+            {
+                try
+                {
+                    var pass = Encrypt.GetSHA256(user.Password);
+                    patch.ApplyTo(user);
+                    if (!Encrypt.Verify(user.Password, pass))
+                        user.Password = Encrypt.GetSHA256(user.Password);
+                    await _unitOfWork.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+            }
+            return user;
         }
         #endregion
     }
