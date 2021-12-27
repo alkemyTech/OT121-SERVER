@@ -11,6 +11,7 @@ namespace OngProject.Core.Interfaces.IServices
     public interface INewsServices
     {
         Task<bool> NewsExistsById(int id);
+        Task<Comments[]> GetAllCommentsByNews(int id);
         Task<News> GetAllDataByIdAsync(int id);
     }
 }

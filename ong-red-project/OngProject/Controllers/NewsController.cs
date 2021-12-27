@@ -21,6 +21,24 @@ namespace OngProject.Controllers
 
         #region Documentacion
         /// <summary>
+        /// Endpoint para listar los comentarios pertenecientes a un post. 
+        /// </summary>
+        /// <response code="200">Listado de todos los comentarios pertenecientes a un post .</response>
+        /// <response code="401">Credenciales invalidas.</response> 
+        /// <response code="404">No se ha encontrado el dato proporcionado.</response>
+        #endregion
+        [Authorize]
+        [HttpGet("{id}/comments")]
+        public async Task<ActionResult> GetAllCommentsByNews(int id)
+        {
+            var result = await _newsServices.GetAllCommentsByNews(id);
+            if (result == null)
+                return NotFound("No existe el post");
+            return Ok(result);
+        }
+
+        #region Documentacion
+        /// <summary>
         /// Endpoint para obtener todos los datos de News por Id
         /// </summary>
         /// <response code="200">Solicitud concretada con exito</response>
