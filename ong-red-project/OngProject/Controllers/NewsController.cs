@@ -52,5 +52,22 @@ namespace OngProject.Controllers
                 return NotFound();
             return Ok(news);
         }
+
+        #region Documentacion
+        /// <summary>
+        /// Endpoint para crear Novedades
+        /// </summary>
+        /// <response code="201">Solicitud concretada con exito</response>
+        /// <response code="400">Errores de validacion.</response>
+        /// <response code="401">Credenciales invalidas</response>  
+        #endregion
+
+        [HttpPost()]
+        [Authorize]
+        public async Task<IActionResult> CreateAsync(NewsDTO newsDTO)
+        {
+            var news = await _newsServices.CreateAsync(newsDTO);
+            return Created(nameof(GetAsync), new { Id = news.Id });
+        }
     }
 }
