@@ -22,6 +22,6 @@ namespace OngProject.Infrastructure.Repositories.IRepository
         void SaveChanges();
 
         Task SaveChangesAsync();
-
+        void DiscardChanges();
     }
 }
