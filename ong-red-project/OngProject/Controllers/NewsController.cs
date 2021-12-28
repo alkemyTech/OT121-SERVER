@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Common;
 using OngProject.Core.DTOs;
+using OngProject.Core.DTOs.NewsDTOs;
 using OngProject.Core.Helper.Pagination;
 using OngProject.Core.Interfaces.IServices;
 using System;
@@ -68,6 +69,28 @@ namespace OngProject.Controllers
         {
             var news = await _newsServices.CreateAsync(newsDTO);
             return Created(nameof(GetAsync), new { Id = news.Id });
+        }
+        #region Documentation
+
+        /// <summary>
+        /// Endpoint para actualizar una Novedad.
+        /// </summary>
+        /// <response code="200">Tarea ejecutada con exito devuelve un mensaje satisfactorio.</response>
+        /// <response code="400">Errores de validacion o excepciones.</response>
+        /// <response code="401">Credenciales invalidas</response>  
+
+        #endregion Documentation
+
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<IActionResult> UpdatePutAsync(int id, [FromForm] NewsUpdateDTO newsUpdateDto)
+        {
+            if (id != newsUpdateDto.Id)
+                return BadRequest(new Result().Fail("Los Ids deben ser iguales."));
+            var update = await _newsServices.UpdatePutAsync(newsUpdateDto);
+            if (update != null)
+                return Ok(newsUpdateDto);
+            return BadRequest(new Result().Fail("El usuario no existe o se produjo un error."));
         }
     }
 }
