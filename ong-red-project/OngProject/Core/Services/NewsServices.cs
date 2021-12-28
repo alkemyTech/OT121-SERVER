@@ -50,5 +50,15 @@ namespace OngProject.Core.Services
             return news.FirstOrDefault();
         }
         #endregion
+
+        #region create news by Post
+        public async Task<News> CreateAsync(NewsDTO newsDto)
+        {
+            var news = _entityMapper.FromNewsDTOtoNews(newsDto);
+            news = await _unitOfWork.NewsRepository.Insert(news);
+            await _unitOfWork.SaveChangesAsync();
+            return news;
+        }
+        #endregion
     }
 }
