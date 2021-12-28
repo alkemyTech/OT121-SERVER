@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Common;
 using OngProject.Core.DTOs;
+using OngProject.Core.DTOs.NewsDTOs;
 using OngProject.Core.Entities;
 using OngProject.Core.Helper.Pagination;
 using System;
@@ -14,5 +15,6 @@ namespace OngProject.Core.Interfaces.IServices
         Task<Comments[]> GetAllCommentsByNews(int id);
         Task<News> GetAllDataByIdAsync(int id);
         Task<News> CreateAsync(NewsDTO newsDto);
+        Task<News> UpdatePutAsync(NewsUpdateDTO newsUpdateDto);
     }
 }
