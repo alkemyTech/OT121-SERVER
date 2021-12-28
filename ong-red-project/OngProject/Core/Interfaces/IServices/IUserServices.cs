@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.JsonPatch;
 using OngProject.Core.DTOs.UserDTOs;
 using OngProject.Core.Entities;
 using System.Collections.Generic;
@@ -12,5 +13,6 @@ namespace OngProject.Core.Interfaces.IServices
         Task<UserProfileDTO> UserExistsByEmail(string email);
         Task<bool> UserExistsById(int id);
         Task<IEnumerable<User>> GetUsersAllDataAsync();
+        Task<User> UpdatePatchAsync(int id, JsonPatchDocument patch);
     }
 }

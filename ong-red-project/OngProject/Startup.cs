@@ -48,7 +48,7 @@ namespace OngProject
                 options.UseSqlServer(Configuration.GetConnectionString("ApplicationConnectionString"));
             });
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OngProject", Version = "v1" });
