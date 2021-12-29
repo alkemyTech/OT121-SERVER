@@ -237,6 +237,20 @@ namespace OngProject.Core.Mapper
             return result;
         }
 
+        public SlideDataFullResponse FromSlideToSlidesFullResponseDTO(Slides slide)
+        {
+            var result = new SlideDataFullResponse()
+            {
+                Id = slide.Id,
+                ImageUrl = slide.ImageUrl,
+                Text = slide.Text,
+                Order = slide.Order,
+                CreatedAt = slide.CreatedAt,
+                OrganizationId = slide.OrganizationId
+            };
+            return result;
+        }
+
         #endregion Slides Mappers
 
     }
