@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using OngProject.Core.Helper.Pagination;
 using System;
 using System.Linq;
+using OngProject.Core.DTOs.NewsDTOs;
 
 namespace OngProject.Core.Services
 {
@@ -58,6 +59,29 @@ namespace OngProject.Core.Services
             news = await _unitOfWork.NewsRepository.Insert(news);
             await _unitOfWork.SaveChangesAsync();
             return news;
+        }
+        #endregion
+
+        #region Update all data from news by PUT
+        public async Task<News> UpdatePutAsync(NewsUpdateDTO newsUpdateDto)
+        {
+            var news = await _unitOfWork.NewsRepository.GetById(newsUpdateDto.Id);
+            if (news != null)
+            {
+                _unitOfWork.DiscardChanges();
+                news = _entityMapper.FromNewsUpdateDTOtoNews(newsUpdateDto);
+                try
+                {
+                    await _unitOfWork.NewsRepository.Update(news);
+                    await _unitOfWork.SaveChangesAsync();
+                    return news;
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
+            }
+            return null;
         }
         #endregion
     }

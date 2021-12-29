@@ -5,6 +5,7 @@ using OngProject.Common;
 using OngProject.Core.DTOs;
 using OngProject.Core.DTOs.CategoriesDTOs;
 using OngProject.Core.DTOs.CommentsDTOs;
+using OngProject.Core.DTOs.NewsDTOs;
 using OngProject.Core.DTOs.SlidesDTOs;
 using OngProject.Core.DTOs.UserDTOs;
 using OngProject.Core.Entities;
@@ -39,7 +40,18 @@ namespace OngProject.Core.Mapper
             };
             return news;
         }
-
+        public News FromNewsUpdateDTOtoNews(NewsUpdateDTO newsDTO)
+        {
+            var news = new News()
+            {
+                Id = newsDTO.Id,
+                Name = newsDTO.Name,
+                Content = newsDTO.Content,
+                Image = newsDTO.Image,
+                CategoryId = newsDTO.CategoryId
+            };
+            return news;
+        }
         #endregion News Mappers
 
         #region Member Mapper

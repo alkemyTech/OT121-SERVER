@@ -63,7 +63,10 @@ namespace OngProject.Infrastructure.Repositories
         {
             await _context.SaveChangesAsync();
         }
-
+        public void DiscardChanges()
+        {
+            _context.ChangeTracker.Clear();
+        }
 
     }
 }
