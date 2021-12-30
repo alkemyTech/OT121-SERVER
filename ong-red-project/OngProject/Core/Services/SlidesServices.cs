@@ -49,5 +49,14 @@ namespace OngProject.Core.Services
             return slides;
         }
 
+        public async Task<SlideDataFullResponse> GetSlideById(int id)
+        {    
+            var slide = await _unitOfWork.SlidesRepository.GetById(id);
+            if(slide == null)
+                return null;
+            return _mapper.FromSlideToSlidesFullResponseDTO(slide);
+        }
+
+
     }
 }

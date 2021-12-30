@@ -36,6 +36,28 @@ namespace OngProject.Controllers
             List<SlideDataShortResponse> result = await _slidesServices.GetListOfSlides();
             return Ok(result);
         }
-       
+
+        #region Documentation
+        /// <summary>
+        /// Devuelve slide cuyo id coincide con el argumento. Si no lo encuentra se retorna error.
+        /// </summary>
+        /// <response code="200">En caso de existir se devuelve el slide</response>
+        /// <response code="404">Slide no existente</response>
+        #endregion Documentation
+        [HttpGet("{id}")]
+        [Authorize(Roles ="Administrator")]
+        public async Task<IActionResult> GetSlide(int id)
+        {
+            bool exists = _slidesServices.EntityExist(id);
+            if(exists){
+                SlideDataFullResponse result = await _slidesServices.GetSlideById(id);
+                return Ok(result);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
     }
 }
