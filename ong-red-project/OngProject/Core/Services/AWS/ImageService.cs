@@ -54,5 +54,26 @@ namespace OngProject.Core.Services.AWS
             else
                 return new Result().NotFound();
         }
+
+        public async Task<string> SaveImageAsync(string fileName, IFormFile image)
+        {
+            AwsManagerResponse responseAws;
+            if (image != null)
+            {
+                if (ValidateFiles.ValidateImage(image))
+                {
+                    responseAws = await _s3AwsHelper.AwsUploadFile(fileName, image);
+                    if (!String.IsNullOrEmpty(responseAws.Errors))
+                    {
+                        return string.Empty;
+                    }
+                    return responseAws.Url;
+                }
+                else
+                    return string.Empty;
+            }
+            else
+                return string.Empty;
+        }
     }
 }

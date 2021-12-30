@@ -11,5 +11,6 @@ namespace OngProject.Core.Interfaces.IServices.AWS
     {
         Task<Result> Save(string fileName, IFormFile image);
         Task<bool> Delete(string name);
+        Task<string> SaveImageAsync(string fileName, IFormFile image);
     }
 }

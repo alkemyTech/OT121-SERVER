@@ -40,9 +40,16 @@ namespace OngProject.Core.Services
 
             if (testimonialsCreate.Image != null)
             {
-                string img = await _imageServices.SaveImageAsync(testimonialsCreate.Image);
-
-                newRecord.Image = img;
+                try
+                {
+                    var nameImage = Guid.NewGuid();
+                    await _imageServices.Save(nameImage.ToString(), testimonialsCreate.Image);
+                    newRecord.Image = nameImage.ToString();
+                }
+                catch (Exception e)
+                {
+                    return new Result().Fail(e.Message);
+                }
             }
 
             await _unitOfWork.TestimonialsRepository.Insert(newRecord);
@@ -61,9 +68,14 @@ namespace OngProject.Core.Services
 
             if (testimonialsUpdate.Image != null)
             {
-                string img = await _imageServices.SaveImageAsync(testimonialsUpdate.Image);
-
-                testimonial.Image = img;
+                try
+                {
+                    await _imageServices.Save(testimonial.Image, testimonialsUpdate.Image);
+                }
+                catch (Exception e)
+                {
+                    return new Result().Fail(e.Message);
+                }
             }
 
             testimonial.Name = testimonialsUpdate.Name;
