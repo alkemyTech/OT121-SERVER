@@ -73,38 +73,6 @@ namespace OngProject.Core.Services
             return membersDto;
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         public async Task<Result> UpdateAsync(MemberUpdateDTO memberUpdate)
         {
             var member = await _unitOfWork.MemberRepository.GetById(memberUpdate.Id);
