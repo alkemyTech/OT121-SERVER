@@ -9,7 +9,7 @@ namespace OngProject.Core.Interfaces.IServices
     {
         Task<List<MembersDTO>> GetAllAsync();
 
-
+        Task<Result> CreateAsync(MemberInsertDTO newMember);
 
         Task<Result> UpdateAsync(MemberUpdateDTO memberUpdate);
     }

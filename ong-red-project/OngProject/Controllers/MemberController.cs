@@ -36,6 +36,7 @@ namespace OngProject.Controllers
 
         #endregion Documentation
 
+        [Authorize(Roles = "Administrator")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -49,35 +50,34 @@ namespace OngProject.Controllers
             }
         }
 
+        #region Documentation
 
+        /// <summary>
+        /// Endpoint para crear un miembro.
+        /// </summary>
+        /// <response code="200">Tarea ejecutada con exito devuelve un mensaje satisfactorio.</response>
+        /// <response code="400">Errores de validacion o excepciones.</response>
 
+        #endregion Documentation
 
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Create([FromForm] MemberInsertDTO member)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    return Ok(await _memberServices.CreateAsync(member));
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new Result().Fail($"Ocurrio un error al momento de intentar ingresar los datos - {ex.Message}"));
+                }
+            }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            return BadRequest(new Result().Fail("Algo salio mal."));
+        }
 
         #region Documentation
 
@@ -97,7 +97,7 @@ namespace OngProject.Controllers
             {
                 return BadRequest(new Result().Fail("Los ids deben coincidir."));
             }
-
+            
             if (ModelState.IsValid)
             {
                 try

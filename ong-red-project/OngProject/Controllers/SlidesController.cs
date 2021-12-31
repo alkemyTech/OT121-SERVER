@@ -59,5 +59,22 @@ namespace OngProject.Controllers
             }
         }
 
+        #region Documentation
+        /// <summary>
+        /// Crea nueva slide, devuelve su ID en caso de exito.
+        /// </summary>
+        /// <response code="201">Solicitud concretada con exito</response>
+        /// <response code="400">Errores de validacion.</response>
+        /// <response code="403">Credenciales invalidas</response>  
+        #endregion
+        [HttpPost]
+        [Authorize(Roles="Administrator")]
+        public async Task<IActionResult> CreateSlide(SlideDTO model){
+            if(!ModelState.IsValid){
+                return BadRequest();
+            }
+            return Ok(await _slidesServices.CreateSlideAsync(model));
+        }
+
     }
 }

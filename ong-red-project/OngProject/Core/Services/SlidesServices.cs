@@ -3,6 +3,7 @@ using OngProject.Common;
 using OngProject.Core.DTOs;
 using OngProject.Core.DTOs.SlidesDTOs;
 using OngProject.Core.Entities;
+using OngProject.Core.Helper.Base64ImageInspector;
 using OngProject.Core.Helper.FomFileData;
 using OngProject.Core.Helper.S3;
 using OngProject.Core.Interfaces.IServices;
@@ -32,13 +33,10 @@ namespace OngProject.Core.Services
         } 
         #endregion
 
-
         public bool EntityExist(int id)
         {
             return _unitOfWork.SlidesRepository.EntityExists(id);
-        }
-        
-        
+        }        
 
         public async Task<List<SlideDataShortResponse>> GetListOfSlides()
         {
@@ -57,6 +55,50 @@ namespace OngProject.Core.Services
             return _mapper.FromSlideToSlidesFullResponseDTO(slide);
         }
 
+        public async Task<int> CreateSlideAsync(SlideDTO model)
+        {
+            if(model.Order ==null)
+                await SetOrderAsTheLastExistentAsync(model);
 
+            Slides slide = _mapper.FromEntryDTOtoSlide(model);
+
+            Result resultFromAws = await UploadEncodedImageToBucketAsync(model.Base64Image);
+            
+            if(resultFromAws.HasErrors == false)
+                slide.ImageUrl = resultFromAws.Messages[0];    
+
+            await _unitOfWork.SlidesRepository.Insert(slide);
+            await _unitOfWork.SaveChangesAsync();
+            return slide.Id;
+        }
+
+        private string GetNewImageName(string imageType)
+        {
+            TimeSpan elapsedTime = DateTime.Now - DateTime.UnixEpoch;
+            var timestamp = (long) elapsedTime.TotalSeconds;
+            return "slide_" + timestamp + '.' + imageType;
+        }
+
+        private async Task<Result> UploadEncodedImageToBucketAsync(string rawBase64File) 
+        {
+            Base64ImageInspector.SplitIntoTypeAndImageData(rawBase64File, out string contentType, out string imageType, out string base64ImageData);
+            string newName = GetNewImageName(imageType);
+            var formFileData = new FormFileData(){
+                FileName = newName,
+                ContentType = contentType,
+                Name = newName
+            };
+            byte[] imageBinaryFile = Convert.FromBase64String(base64ImageData);
+            IFormFile newFile = ConvertFile.BinaryToFormFile(imageBinaryFile, formFileData);
+            return await _imageServices.Save(newFile.FileName, newFile);
+        }
+        
+        private async Task SetOrderAsTheLastExistentAsync(SlideDTO model)
+        {
+            IEnumerable<Slides> slides = await _unitOfWork.SlidesRepository.GetAll();
+            var maxOrder = slides.Select(s => s.Order).Max();
+            model.Order = maxOrder + 1;
+        }
+  
     }
 }

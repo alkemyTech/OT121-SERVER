@@ -7,11 +7,11 @@ namespace OngProject.Core.DTOs
 {
     public class MemberInsertDTO
     {
-
         /// <summary>
         /// Requerido: Nombre del nuevo miembro
         /// </summary>
-        [Required(ErrorMessage = "Escriba su nombre")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [MaxLength(255, ErrorMessage = "El campo {0} debe tener un maximo de {1} caracteres.")]
         public string Name { get; set; }
 
         /// <summary>

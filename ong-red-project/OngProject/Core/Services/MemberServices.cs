@@ -29,6 +29,38 @@ namespace OngProject.Core.Services
             _mapper = new EntityMapper();
         }
 
+        public async Task<Result> CreateAsync(MemberInsertDTO newMember)
+        {
+            var newRecord = new Member
+            {
+                Name = newMember.Name,
+                FacebookUrl = newMember.FacebookUrl,
+                InstagramUrl = newMember.InstagramUrl,
+                LinkedinUrl = newMember.LinkedinUrl,
+                Description = newMember.Description
+            };
+
+            try
+            {
+                if (newMember.Image != null)
+                {
+                    var nameImage = Guid.NewGuid();
+                    var result = await _imageService.Save(nameImage.ToString(), newMember.Image);
+                    newRecord.Image = result.Messages[0];
+                }
+            }
+            catch (Exception ex)
+            {
+                return new Result().Fail($"Ocurrio un error al momento de intentar guardar la imagen - {ex.Message}");
+            }
+
+            await _unitOfWork.MemberRepository.Insert(newRecord);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return new Result().Success("Datos guardados satisfactoriamente.");
+        }
+
         public async Task<List<MembersDTO>> GetAllAsync()
         {
             var members = await _unitOfWork.MemberRepository.GetAll();
