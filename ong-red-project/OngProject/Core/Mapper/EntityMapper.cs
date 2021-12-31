@@ -263,7 +263,19 @@ namespace OngProject.Core.Mapper
             return result;
         }
 
+        public Slides FromEntryDTOtoSlide(SlideDTO model)
+        {
+            return new Slides(){
+                Text = model.Text,
+                Order = (int) model.Order,
+                OrganizationId = (int) model.OrganizationId,               
+                CreatedAt = model.CreatedAt,
+                IsDeleted = false
+            };
+        }
+
         #endregion Slides Mappers
 
     }
 }
+
