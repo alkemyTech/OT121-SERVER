@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using OngProject.Common;
+﻿using OngProject.Common;
 using OngProject.Core.DTOs;
-using OngProject.Core.Entities;
-using OngProject.Core.Helper.Pagination;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OngProject.Core.Interfaces.IServices
 {
     public interface IMemberServices
     {
         Task<List<MembersDTO>> GetAllAsync();
+
+
+
+        Task<Result> UpdateAsync(MemberUpdateDTO memberUpdate);
     }
 }
