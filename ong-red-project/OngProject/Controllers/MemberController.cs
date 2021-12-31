@@ -89,7 +89,7 @@ namespace OngProject.Controllers
 
         #endregion Documentation
 
-        //[Authorize]
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromForm] MemberUpdateDTO memberUpdate, int id)
         {
