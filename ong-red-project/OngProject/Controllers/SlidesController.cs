@@ -69,11 +69,32 @@ namespace OngProject.Controllers
         #endregion
         [HttpPost]
         [Authorize(Roles="Administrator")]
-        public async Task<IActionResult> CreateSlide(SlideDTO model){
+        public async Task<IActionResult> CreateSlide([FromForm]SlideDTOForCreate model){
             if(!ModelState.IsValid){
                 return BadRequest();
             }
             return Ok(await _slidesServices.CreateSlideAsync(model));
+        }
+
+                #region Documentation
+        /// <summary>
+        /// Actualiza slide existente y devuelve su ID.
+        /// </summary>
+        /// <response code="200">Solicitud concretada con exito</response>
+        /// <response code="400">Errores de validacion.</response>
+        /// <response code="403">Credenciales invalidas</response>  
+        #endregion
+        [HttpPut("{id}")]
+        [Authorize(Roles="Administrator")]
+        public async Task<IActionResult> UpdateSlide([FromForm] SlideDTOForUpdate model, int id)
+        {
+            if(!_slidesServices.EntityExist(id) || !ModelState.IsValid )
+            {
+                return BadRequest();
+            }
+            var res = await _slidesServices.UpdateAsync(model, id);
+            return Ok(res.Messages);
+            
         }
 
     }
