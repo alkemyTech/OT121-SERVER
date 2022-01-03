@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Common;
 using OngProject.Core.DTOs;
+using OngProject.Core.DTOs.ActivitiesDTOs;
 using OngProject.Core.Entities;
 using OngProject.Core.Interfaces.IServices;
 using System;
@@ -52,7 +53,14 @@ namespace OngProject.Controllers
             var activity = await _activitiesServices.GetById(id);
             return Ok(activity);
         }
-        
+
+        [HttpPost()]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> CreateAsync([FromForm] ActivitiesCreateDTO activitiesDTO)
+        {
+            var activities = await _activitiesServices.CreateAsync(activitiesDTO);
+            return Created(nameof(Get), new { Id = activities.Id });
+        }
 
     }
 }
