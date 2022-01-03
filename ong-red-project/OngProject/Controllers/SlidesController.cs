@@ -78,7 +78,7 @@ namespace OngProject.Controllers
 
                 #region Documentation
         /// <summary>
-        /// Actualiza slide existente y devuelve su ID.
+        /// Actualiza slide existente.
         /// </summary>
         /// <response code="200">Solicitud concretada con exito</response>
         /// <response code="400">Errores de validacion.</response>

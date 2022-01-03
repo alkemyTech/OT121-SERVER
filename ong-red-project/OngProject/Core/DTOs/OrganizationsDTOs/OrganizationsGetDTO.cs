@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using OngProject.Core.DTOs.SlidesDTOs;
 
 namespace OngProject.Core.DTOs
-{
+{    
     public class OrganizationsGetDTO
     {
         public string Name { get; set; }
@@ -14,5 +15,7 @@ namespace OngProject.Core.DTOs
         public string FacebookUrl { get; set; }
         public string InstagramUrl { get; set; }
         public string LinkedinUrl { get; set; }
+        public List<SlideDataFullResponse> AssociatedSlides { get; set; }
     }
+
 }
