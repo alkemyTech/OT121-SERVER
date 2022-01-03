@@ -38,7 +38,7 @@ namespace OngProject.Core.Services
         private async Task AddAssociatedSlidesAsync(OrganizationsGetDTO organizationsDTO, int associatedOrganizationId)
         {
             IEnumerable<Slides> slides = await _unitOfWork.SlidesRepository.FindByCondition(s => s.OrganizationId == associatedOrganizationId);
-            List<SlideDataFullResponse> associatedSlidesInfo = slides.OrderBy(s => s.Order).Select(s => _mapper.FromSlideToSlidesFullResponseDTO(s)).ToList();
+            List<SlideDataShortResponse> associatedSlidesInfo = slides.OrderBy(s => s.Order).Select(s => _mapper.FromSlidesToSlidesShortResponseDTO(s)).ToList();
             organizationsDTO.AssociatedSlides = associatedSlidesInfo;
         }
 
