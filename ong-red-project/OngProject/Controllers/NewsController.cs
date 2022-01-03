@@ -89,7 +89,7 @@ namespace OngProject.Controllers
                 return BadRequest(new Result().Fail("Los Ids deben ser iguales."));
             var update = await _newsServices.UpdatePutAsync(newsUpdateDto);
             if (update != null)
-                return Ok(newsUpdateDto);
+                return Ok(update);
             return BadRequest(new Result().Fail("El usuario no existe o se produjo un error."));
         }
     }
