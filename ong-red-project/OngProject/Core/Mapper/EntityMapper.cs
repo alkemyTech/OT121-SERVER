@@ -41,14 +41,25 @@ namespace OngProject.Core.Mapper
             return news;
         }
 
-        public News FromNewsUpdateDTOtoNews(NewsUpdateDTO newsDTO)
+        public News FromNewsCreateDTOtoNews(NewsCreateDTO newsDTO, string UrlImage)
+        {
+            var news = new News()
+            {
+                Name = newsDTO.Name,
+                Content = newsDTO.Content,
+                Image = UrlImage,
+                CategoryId = newsDTO.CategoryId
+            };
+            return news;
+        }
+        public News FromNewsUpdateDTOtoNews(NewsUpdateDTO newsDTO, string UrlImage)
         {
             var news = new News()
             {
                 Id = newsDTO.Id,
                 Name = newsDTO.Name,
                 Content = newsDTO.Content,
-                Image = newsDTO.Image,
+                Image = UrlImage,
                 CategoryId = newsDTO.CategoryId
             };
             return news;

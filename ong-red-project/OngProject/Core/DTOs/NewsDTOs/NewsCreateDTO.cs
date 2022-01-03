@@ -7,16 +7,17 @@ using System.Threading.Tasks;
 
 namespace OngProject.Core.DTOs.NewsDTOs
 {
-    public class NewsUpdateDTO
+    public class NewsCreateDTO
     {
         [Required]
-        public int Id { get; set; }
-        [Required]
         public string Name { get; set; }
+        
         [Required]
         public string Content { get; set; }
+        
         [Required]
         public IFormFile Image { get; set; }
+
         [Required]
         public int CategoryId { get; set; }
     }
