@@ -8,6 +8,7 @@ using OngProject.Core.Interfaces.IServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace OngProject.Controllers
@@ -54,10 +55,12 @@ namespace OngProject.Controllers
             return Ok(activity);
         }
 
+
         [HttpPost()]
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateAsync([FromForm] ActivitiesCreateDTO activitiesDTO)
         {
+          
             var activities = await _activitiesServices.CreateAsync(activitiesDTO);
             return Created(nameof(Get), new { Id = activities.Id });
         }
