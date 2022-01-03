@@ -14,7 +14,7 @@ namespace OngProject.Core.Interfaces.IServices
         Task<bool> NewsExistsById(int id);
         Task<Comments[]> GetAllCommentsByNews(int id);
         Task<News> GetAllDataByIdAsync(int id);
-        Task<News> CreateAsync(NewsDTO newsDto);
+        Task<News> CreateAsync(NewsCreateDTO newsDto);
         Task<News> UpdatePutAsync(NewsUpdateDTO newsUpdateDto);
     }
 }

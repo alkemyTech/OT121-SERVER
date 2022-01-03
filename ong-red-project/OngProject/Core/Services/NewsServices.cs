@@ -53,9 +53,10 @@ namespace OngProject.Core.Services
         #endregion
 
         #region create news by Post
-        public async Task<News> CreateAsync(NewsDTO newsDto)
+        public async Task<News> CreateAsync(NewsCreateDTO newsDto)
         {
-            var news = _entityMapper.FromNewsDTOtoNews(newsDto);
+            var urlImage = await _imageServices.SaveImageAsync($"{Guid.NewGuid()}_{newsDto.Image.FileName}",newsDto.Image);
+            var news = _entityMapper.FromNewsCreateDTOtoNews(newsDto,urlImage);
             news = await _unitOfWork.NewsRepository.Insert(news);
             await _unitOfWork.SaveChangesAsync();
             return news;
