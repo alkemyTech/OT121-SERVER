@@ -15,6 +15,8 @@ namespace OngProject.Core.DTOs
         /// <summary>
         /// Nombre a modificar
         /// </summary>
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [MaxLength(255, ErrorMessage = "El campo {0} debe tener un maximo de {1} caracteres.")]
         public string Name { get; set; }
 
         /// <summary>
