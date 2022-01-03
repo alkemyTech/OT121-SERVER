@@ -65,7 +65,7 @@ namespace OngProject.Controllers
 
         [HttpPost()]
         [Authorize]
-        public async Task<IActionResult> CreateAsync(NewsDTO newsDTO)
+        public async Task<IActionResult> CreateAsync([FromForm] NewsCreateDTO newsDTO)
         {
             var news = await _newsServices.CreateAsync(newsDTO);
             return Created(nameof(GetAsync), new { Id = news.Id });
