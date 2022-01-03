@@ -70,7 +70,10 @@ namespace OngProject.Core.Services
             if (news != null)
             {
                 _unitOfWork.DiscardChanges();
-                news = _entityMapper.FromNewsUpdateDTOtoNews(newsUpdateDto);
+                await _imageServices.Delete(news.Image);
+                var urlImage = await _imageServices.SaveImageAsync($"{Guid.NewGuid()}_{newsUpdateDto.Image.FileName}", newsUpdateDto.Image);
+
+                news = _entityMapper.FromNewsUpdateDTOtoNews(newsUpdateDto, urlImage);
                 try
                 {
                     await _unitOfWork.NewsRepository.Update(news);
