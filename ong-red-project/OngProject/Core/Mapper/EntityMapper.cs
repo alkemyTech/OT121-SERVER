@@ -243,6 +243,8 @@ namespace OngProject.Core.Mapper
 
         #region Slides Mappers
 
+
+
         public SlideDataShortResponse FromSlidesToSlidesShortResponseDTO(Slides slide)
         {
             var result = new SlideDataShortResponse()
@@ -269,17 +271,22 @@ namespace OngProject.Core.Mapper
             return result;
         }
 
-        public Slides FromEntryDTOtoSlide(SlideDTO model)
+        public Slides FromEntryDTOtoSlide(SlideDTOForCreate model)
         {
             return new Slides(){
                 Text = model.Text,
                 Order = (int) model.Order,
                 OrganizationId = (int) model.OrganizationId,               
-                CreatedAt = model.CreatedAt,
                 IsDeleted = false
             };
         }
 
+        public void CopyModelToSlide(SlideDTOForUpdate model, Slides slide)
+        {
+            slide.Order = (int) model.Order;
+            slide.OrganizationId = (int) model.OrganizationId;
+            slide.Text = model.Text;
+        }
         #endregion Slides Mappers
     }
 }
