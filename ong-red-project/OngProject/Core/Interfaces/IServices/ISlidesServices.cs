@@ -11,6 +11,8 @@ namespace OngProject.Core.Interfaces.IServices
         bool EntityExist(int id);
         Task<List<SlideDataShortResponse> > GetListOfSlides();
         Task<SlideDataFullResponse> GetSlideById(int id);
+        Task<int> CreateSlideAsync(SlideDTOForCreate model);
+        Task<Result> UpdateAsync(SlideDTOForUpdate model, int id);
     }
 
 }

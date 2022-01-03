@@ -40,6 +40,7 @@ namespace OngProject.Core.Mapper
             };
             return news;
         }
+
         public News FromNewsCreateDTOtoNews(NewsCreateDTO newsDTO, string UrlImage)
         {
             var news = new News()
@@ -63,6 +64,7 @@ namespace OngProject.Core.Mapper
             };
             return news;
         }
+
         #endregion News Mappers
 
         #region Member Mapper
@@ -139,7 +141,6 @@ namespace OngProject.Core.Mapper
             };
         }
 
-
         #endregion Organization Mappers
 
         #region User Mappers
@@ -195,8 +196,8 @@ namespace OngProject.Core.Mapper
 
         #endregion Activities Mappers
 
-
         #region Comments Mappers
+
         public CommentCreateRequestDTO FromCommentsToCommentsDTO(Comments comments)
         {
             return new CommentCreateRequestDTO()
@@ -206,21 +207,23 @@ namespace OngProject.Core.Mapper
                 News_id = comments.NewId
             };
         }
+
         #endregion Comments Mappers
 
         #region Categories Mappers
-        public CategoryGetDTO FromCategoriesToCategoriesDTO(Category category) {
 
+        public CategoryGetDTO FromCategoriesToCategoriesDTO(Category category)
+        {
             return new CategoryGetDTO()
             {
                 Name = category.Name,
                 Description = category.Description,
                 Image = category.Image
             };
-
         }
 
-        public CategoryGetDTO FromCategoryInsertDTOToCategoryGetDTO(CategoryInsertDTO category, string imageUrl){
+        public CategoryGetDTO FromCategoryInsertDTOToCategoryGetDTO(CategoryInsertDTO category, string imageUrl)
+        {
             return new CategoryGetDTO()
             {
                 Name = category.Name,
@@ -237,7 +240,8 @@ namespace OngProject.Core.Mapper
             return oldCategory;
         }
 
-        public Category FromCategoryGetDTOToCategory(CategoryGetDTO category){
+        public Category FromCategoryGetDTOToCategory(CategoryGetDTO category)
+        {
             return new Category()
             {
                 Name = category.Name,
@@ -248,10 +252,14 @@ namespace OngProject.Core.Mapper
 
         #endregion Categories Mappers
 
-        #region Slides Mappers        
-    
-        public SlideDataShortResponse FromSlidesToSlidesShortResponseDTO(Slides slide){
-            var result = new SlideDataShortResponse(){
+        #region Slides Mappers
+
+
+
+        public SlideDataShortResponse FromSlidesToSlidesShortResponseDTO(Slides slide)
+        {
+            var result = new SlideDataShortResponse()
+            {
                 Id = slide.Id,
                 ImageUrl = slide.ImageUrl,
                 Text = slide.Text,
@@ -274,7 +282,23 @@ namespace OngProject.Core.Mapper
             return result;
         }
 
-        #endregion Slides Mappers
+        public Slides FromEntryDTOtoSlide(SlideDTOForCreate model)
+        {
+            return new Slides(){
+                Text = model.Text,
+                Order = (int) model.Order,
+                OrganizationId = (int) model.OrganizationId,               
+                IsDeleted = false
+            };
+        }
 
+        public void CopyModelToSlide(SlideDTOForUpdate model, Slides slide)
+        {
+            slide.Order = (int) model.Order;
+            slide.OrganizationId = (int) model.OrganizationId;
+            slide.Text = model.Text;
+        }
+        #endregion Slides Mappers
     }
 }
+
