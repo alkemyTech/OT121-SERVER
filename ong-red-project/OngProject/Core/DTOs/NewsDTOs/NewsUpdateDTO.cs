@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace OngProject.Core.DTOs.NewsDTOs
         [Required]
         public string Content { get; set; }
         [Required]
-        public string Image { get; set; }
+        public IFormFile Image { get; set; }
         [Required]
         public int CategoryId { get; set; }
     }
