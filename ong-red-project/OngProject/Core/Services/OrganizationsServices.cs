@@ -1,11 +1,9 @@
-﻿using OngProject.Common;
-using OngProject.Core.DTOs;
+﻿using OngProject.Core.DTOs;
+using OngProject.Core.DTOs.SlidesDTOs;
+using OngProject.Core.Entities;
 using OngProject.Core.Interfaces.IServices;
-using OngProject.Core.Interfaces.IServices.AWS;
 using OngProject.Core.Mapper;
-using OngProject.Core.Services.AWS;
 using OngProject.Infrastructure.Repositories.IRepository;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,7 +31,16 @@ namespace OngProject.Core.Services
         {
             var organizations = await _unitOfWork.OrganizationsRepository.GetById(id);
             var organizationsDTO = _mapper.FromOrganizationToOrganizationGetDto(organizations);
+            await AddAssociatedSlidesAsync(organizationsDTO, id);
             return organizationsDTO;
         }
+
+        private async Task AddAssociatedSlidesAsync(OrganizationsGetDTO organizationsDTO, int associatedOrganizationId)
+        {
+            IEnumerable<Slides> slides = await _unitOfWork.SlidesRepository.FindByCondition(s => s.OrganizationId == associatedOrganizationId);
+            List<SlideDataShortResponse> associatedSlidesInfo = slides.OrderBy(s => s.Order).Select(s => _mapper.FromSlidesToSlidesShortResponseDTO(s)).ToList();
+            organizationsDTO.AssociatedSlides = associatedSlidesInfo;
+        }
+
     }
 }
