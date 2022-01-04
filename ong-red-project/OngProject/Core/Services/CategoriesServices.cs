@@ -117,14 +117,21 @@ namespace OngProject.Core.Services
                 string imageUrl = String.Empty;
                 if (categoryInfo.Image != null)
                 {
-                    Result savedImage = await _imageServices.Save(categoryInfo.Image.FileName, categoryInfo.Image);
-                    if (savedImage.HasErrors)
+                    if(!String.IsNullOrEmpty(category.Image))
                     {
-                        return null;
+                        if(!await _imageServices.Delete(category.Image))
+                        {
+                            return null;
+                        }
                     }
-                    imageUrl = savedImage.Messages[0];
-                }
+                        Result savedImage = await _imageServices.Save($"{Guid.NewGuid()}_{categoryInfo.Image.FileName}", categoryInfo.Image);
+                        if (savedImage.HasErrors)
+                        {
+                            return null;
+                        }
+                        imageUrl = savedImage.Messages[0];
 
+                }
                 category = _entityMapper.FromCategoryUpdateDTOToCategory(categoryInfo, category, imageUrl);
                 Result result = await _unitOfWork.CategoryRepository.Update(category);
                 if(!result.HasErrors){
