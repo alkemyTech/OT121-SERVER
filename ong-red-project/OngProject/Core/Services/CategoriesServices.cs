@@ -85,8 +85,8 @@ namespace OngProject.Core.Services
 
                 if (imageName != String.Empty)
                 {
-                    Result res = await _imageServices.Save(category.Image.FileName, category.Image);
-                    if(!res.Messages[0].StartsWith("https")){
+                    Result res = await _imageServices.Save($"{Guid.NewGuid()}_{category.Image.FileName}", category.Image);
+                    if (!res.Messages[0].StartsWith("https")){
                         return null;
                     }else{
                         imageUrl = res.Messages[0];
