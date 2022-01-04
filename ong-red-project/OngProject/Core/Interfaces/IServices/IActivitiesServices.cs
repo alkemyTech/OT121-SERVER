@@ -1,5 +1,6 @@
 ﻿using OngProject.Common;
 using OngProject.Core.DTOs;
+using OngProject.Core.DTOs.ActivitiesDTOs;
 using OngProject.Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,6 @@ namespace OngProject.Core.Interfaces.IServices
         Task<IEnumerable<ActivitiesDTO>> GetAll();
         Task<ActivitiesDTO> GetById(int id);
         bool EntityExists(int id);
+        Task<Activities> UpdatePutAsync(ActivitiesUpdateDTO activitiesUpdateDto);
     }
 }
