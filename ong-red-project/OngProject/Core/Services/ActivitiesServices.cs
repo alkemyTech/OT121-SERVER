@@ -77,5 +77,16 @@ namespace OngProject.Core.Services
             return null;
         }
         #endregion
+
+        #region create Activities by Post
+        public async Task<Activities> CreateAsync(ActivitiesCreateDTO activitiesDTO)
+        {
+            var urlImage = await _imageServices.SaveImageAsync($"{Guid.NewGuid()}_{activitiesDTO.Image.FileName}", activitiesDTO.Image);
+            var activities = _mapper.FromActivitiesCreateDTOtoActivities(activitiesDTO, urlImage);
+            activities = await _unitOfWork.ActivitiesRepository.Insert(activities);
+            await _unitOfWork.SaveChangesAsync();
+            return activities;
+        }
+        #endregion
     }
 }
