@@ -71,7 +71,7 @@ namespace OngProject.Controllers
         public async Task<IActionResult> CreateAsync([FromForm] ActivitiesCreateDTO activitiesDTO)
         {
             var activities = await _activitiesServices.CreateAsync(activitiesDTO);
-            return Created(nameof(Get), new { Id = activities.Id });
+            return Created(nameof(Get), new { Id = activities.Id }); 
         }
 
     }
