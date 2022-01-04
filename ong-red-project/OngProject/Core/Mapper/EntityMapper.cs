@@ -207,6 +207,17 @@ namespace OngProject.Core.Mapper
             return activities;
         }
 
+        public Activities FromActivitiesCreateDTOtoActivities(ActivitiesCreateDTO activitiesDTO, string UrlImage)
+        {
+            var activities = new Activities()
+            {
+                Name = activitiesDTO.Name,
+                Content = activitiesDTO.Content,
+                Image = UrlImage,
+            };
+            return activities;
+        }
+
         #endregion Activities Mappers
 
         #region Comments Mappers
