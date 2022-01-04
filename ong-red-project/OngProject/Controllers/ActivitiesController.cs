@@ -56,11 +56,20 @@ namespace OngProject.Controllers
         }
 
 
+        #region
+
+        /// <summary>
+        /// Endpoint para crear Actividades
+        /// </summary>
+        /// <response code="201">Solicitud concretada con exito</response>
+        /// <response code="400">Errores de validacion.</response>
+        /// <response code="401">Credenciales invalidas</response>  
+        #endregion
+
         [HttpPost()]
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> CreateAsync([FromForm] ActivitiesCreateDTO activitiesDTO)
         {
-          
             var activities = await _activitiesServices.CreateAsync(activitiesDTO);
             return Created(nameof(Get), new { Id = activities.Id });
         }
