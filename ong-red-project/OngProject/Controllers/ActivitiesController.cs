@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Common;
 using OngProject.Core.DTOs;
+using OngProject.Core.DTOs.ActivitiesDTOs;
 using OngProject.Core.Entities;
 using OngProject.Core.Interfaces.IServices;
 using System;
@@ -52,7 +53,32 @@ namespace OngProject.Controllers
             var activity = await _activitiesServices.GetById(id);
             return Ok(activity);
         }
-        
+
+
+        #region Documentation
+
+        /// <summary>
+        /// Endpoint para actualizar una Activities.
+        /// </summary>
+        /// <response code="200">Tarea ejecutada con exito devuelve un mensaje satisfactorio.</response>
+        /// <response code="400">Errores de validacion o excepciones.</response>
+        /// <response code="401">Credenciales invalidas</response>  
+
+        #endregion Documentation
+
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> UpdatePutAsync(int id, [FromForm] ActivitiesUpdateDTO activitiesUpdateDto)
+        {
+            if (id != activitiesUpdateDto.Id)
+                return BadRequest(new Result().Fail("Los Ids deben ser iguales."));
+            var update = await _activitiesServices.UpdatePutAsync(activitiesUpdateDto);
+            if (update != null)
+                return Ok(update);
+            return BadRequest(new Result().Fail("El usuario no existe o se produjo un error."));
+        }
+
+
 
     }
 }
