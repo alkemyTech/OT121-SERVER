@@ -72,5 +72,19 @@ namespace OngProject.Controllers
             return Ok(registered);
         }
 
+        #region Documentacion
+        /// <summary>
+        /// Endpoint para obtener un listado de todos los Usuarios
+        /// </summary>
+        /// <response code="200">Solicitud concretada con exito</response>
+        /// <response code="401">Credenciales no validas</response> 
+        #endregion
+        [HttpGet()]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> GetAllAsync()
+        {
+            return Ok(await _contactsServices.GetAll());
+        }
+
     }
 }
