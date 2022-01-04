@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using OngProject.Common;
 using OngProject.Core.DTOs;
+using OngProject.Core.DTOs.ActivitiesDTOs;
 using OngProject.Core.DTOs.CategoriesDTOs;
 using OngProject.Core.DTOs.CommentsDTOs;
 using OngProject.Core.DTOs.NewsDTOs;
@@ -190,6 +191,18 @@ namespace OngProject.Core.Mapper
                 Name = activitiesDTO.Name,
                 Content = activitiesDTO.Content,
                 Image = activitiesDTO.Image
+            };
+            return activities;
+        }
+
+        public Activities FromActivitiesUpdateDTOtoActivities(ActivitiesUpdateDTO activitiesDTO, string UrlImage)
+        {
+            var activities = new Activities()
+            {
+                Id = activitiesDTO.Id,
+                Name = activitiesDTO.Name,
+                Content = activitiesDTO.Content,
+                Image = UrlImage,
             };
             return activities;
         }

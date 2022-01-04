@@ -11,5 +11,6 @@ namespace OngProject.Core.Interfaces.IServices
         Task<ContactDTO> GetById(int id);
         bool EntityExists(int id);
         Task<ContactDTO> RegisterAsync(ContactDTO contact);
+        Task<IEnumerable<ContactDTO>> GetAll();
     }
 }

@@ -24,7 +24,15 @@ namespace OngProject.Core.Services
             this.uriService = uriService;
         }
         #endregion
-       
+
+        public async Task<IEnumerable<ContactDTO>> GetAll()
+        {
+            var mapper = new EntityMapper();
+            var contactsList = await _unitOfWork.ContactsRepository.GetAll();
+            var contactsDTO = contactsList.Select(x => mapper.FromContactsToContactsDto(x)).ToList();
+            return contactsDTO;
+        }
+
         public async Task<ContactDTO> GetById(int id)
         {
 
