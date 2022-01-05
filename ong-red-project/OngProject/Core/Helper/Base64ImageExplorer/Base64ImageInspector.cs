@@ -30,14 +30,11 @@ namespace OngProject.Core.Helper.Base64ImageInspector
             {
                 contentType = "image/jpg";
                 imageType = "jpg";
-            }
-
-            if(header.Contains("image/png"))
+            }else if(header.Contains("image/png"))
             {
                 contentType = "image/png";
                 imageType = "png";
-            }
-            if(header.Contains("image/jpeg"))
+            }else if(header.Contains("image/jpeg"))
             {
                 contentType = "image/jpeg";
                 imageType = "jpeg";
