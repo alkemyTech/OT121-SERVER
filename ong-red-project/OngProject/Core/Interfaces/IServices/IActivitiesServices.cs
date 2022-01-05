@@ -15,5 +15,6 @@ namespace OngProject.Core.Interfaces.IServices
         Task<ActivitiesDTO> GetById(int id);
         bool EntityExists(int id);
         Task<Activities> UpdatePutAsync(ActivitiesUpdateDTO activitiesUpdateDto);
+        Task<Activities> CreateAsync(ActivitiesCreateDTO activitiesDTO);
     }
 }
