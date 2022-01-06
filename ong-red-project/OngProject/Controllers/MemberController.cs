@@ -36,17 +36,20 @@ namespace OngProject.Controllers
 
         #endregion Documentation
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery]int page = 1)
         {
             try
             {
-                return Ok(await _memberServices.GetAllAsync());
+                if (User.IsInRole("Administrator"))
+                    return Ok(await _memberServices.GetAllAsync());
+
+                return Ok(await _memberServices.GetAllByPaginationAsync(page));
             }
             catch (Exception e)
             {
-                return NotFound(e.Message);
+                return NotFound(new Result().NotFound());
             }
         }
 
