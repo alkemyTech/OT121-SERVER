@@ -65,12 +65,47 @@ namespace OngProject.Core.Services
         {
             var members = await _unitOfWork.MemberRepository.GetAll();
 
-            if (members == null)
-                throw new Exception("No se encontraron datos.");
+            if (!members.Any())
+                throw new Exception();
 
             var membersDto = members.Select(m => _mapper.FromMembersToMembersDto(m)).ToList();
 
             return membersDto;
+        }
+
+        public async Task<PaginationDTO<MembersDTO>> GetAllByPaginationAsync(int page)
+        {
+            var quantity = 10;
+            var prevPage = string.Empty;
+            var nextPage = string.Empty;
+            var membersCount = await _unitOfWork.MemberRepository.CountAsync();
+            var totalPages = (int)Math.Floor((decimal)membersCount / quantity);
+            if ((membersCount % quantity) > 0)
+                totalPages++;
+
+            if (page > totalPages || page == 1)
+                page = 1;
+            else
+                prevPage = _uriService.GetPage("/Members", page - 1);
+
+            if (page < totalPages)
+                nextPage = _uriService.GetPage("/Members", page + 1);
+
+
+            var membersList = await _unitOfWork.MemberRepository.GetPageAsync(x => x.Id > 0, quantity, page);
+
+            var membersDto = membersList.Select(m => _mapper.FromMembersToMembersDto(m)).ToList();
+
+            PaginationDTO<MembersDTO> pagingResponse = new()
+            {
+                CurrentPage = page,
+                TotalItems = membersCount,
+                TotalPages = totalPages,
+                PrevPage = prevPage,
+                NextPage = nextPage,
+                Items = membersDto.ToList()
+            };
+            return pagingResponse;
         }
 
         public async Task<Result> UpdateAsync(MemberUpdateDTO memberUpdate)
