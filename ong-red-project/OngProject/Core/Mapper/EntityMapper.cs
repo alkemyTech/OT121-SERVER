@@ -8,6 +8,7 @@ using OngProject.Core.DTOs.CategoriesDTOs;
 using OngProject.Core.DTOs.CommentsDTOs;
 using OngProject.Core.DTOs.NewsDTOs;
 using OngProject.Core.DTOs.SlidesDTOs;
+using OngProject.Core.DTOs.TestimonialsDTOs;
 using OngProject.Core.DTOs.UserDTOs;
 using OngProject.Core.Entities;
 using OngProject.Infrastructure.Repositories;
@@ -323,6 +324,20 @@ namespace OngProject.Core.Mapper
             slide.Text = model.Text;
         }
         #endregion Slides Mappers
+
+        #region Testimonials Mappers
+
+        public TestimonialsDTO FromTestimonialsToTestimonialsDto(Testimonials testimonials)
+        {
+            return new TestimonialsDTO
+            {
+                Name = testimonials.Name,
+                Image = testimonials.Image,
+                Content = testimonials.Content
+            };
+        }
+
+        #endregion 
     }
 }
 
