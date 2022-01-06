@@ -81,5 +81,22 @@ namespace OngProject.Controllers
 
             return BadRequest(new Result().Fail("Algo salio mal."));
         }
+
+        #region Documentacion
+        /// <summary>
+        /// Endpoint para obtener un listado de todos los Usuarios
+        /// </summary>
+        /// <response code="200">Solicitud concretada con exito</response>
+        /// <response code="401">Credenciales no validas</response> 
+        #endregion
+        [HttpGet()]
+        [Authorize]
+        public async Task<IActionResult> GetAllAsync([FromQuery] int? page)
+        {
+            int quantity = 10;
+            if (!page.HasValue)
+                page = 1;
+            return Ok(await _testimonialsServices.GetByPagingAsync((int)page, quantity));
+        }
     }
 }
