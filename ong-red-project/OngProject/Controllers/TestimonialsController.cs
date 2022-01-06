@@ -30,7 +30,7 @@ namespace OngProject.Controllers
         /// </remarks>
         /// <param name="testimonialsCreate">Objeto a crear a la base de datos.</param>
         /// <response code="201">Created. Tarea ejecutada con exito devuelve un mensaje satisfactorio.</response>        
-        /// <response code="400">BadRequest. No se ha creado el objeto en la BD. Errores de validacion o excepciones..</response>
+        /// <response code="400">BadRequest. No se ha creado el objeto en la BD. Informa errores de validacion o excepciones.</response>
         #endregion Documentation
 
         [Authorize(Roles = "Administrator")]
@@ -57,15 +57,22 @@ namespace OngProject.Controllers
         #region Documentation
 
         /// <summary>
-        /// Endpoint para actualizar un testimoniio.
+        /// Actualizar un testimonio en la base de datos.
         /// </summary>
-        /// <response code="200">Tarea ejecutada con exito devuelve un mensaje satisfactorio.</response>
-        /// <response code="400">Errores de validacion o excepciones.</response>
+        /// <remarks>
+        /// Para actualizar un testimonio en la base de datos, debe acceder como "Administrator"
+        /// </remarks>
+        /// <param name="testimonialsUpdate">Objeto para actualizar la base de datos.</param>
+        /// <param name="id">Id del objeto.</param>
+        /// <response code="200">OK. Tarea ejecutada con exito devuelve un mensaje satisfactorio.</response>
+        /// <response code="400">BadRequest. No se ha creado el objeto en la BD. Informa errores de validacion o excepciones.</response>
 
         #endregion Documentation
 
         [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update([FromForm] TestimonialsUpdateDTO testimonialsUpdate, int id)
         {
             if (id != testimonialsUpdate.Id)
