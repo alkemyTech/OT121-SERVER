@@ -75,7 +75,7 @@ namespace OngProject.Core.Services
 
         public async Task<PaginationDTO<MembersDTO>> GetAllByPaginationAsync(int page)
         {
-            var quantity = 10;
+            int quantity = 10;
             var prevPage = string.Empty;
             var nextPage = string.Empty;
             var membersCount = await _unitOfWork.MemberRepository.CountAsync();
@@ -86,10 +86,10 @@ namespace OngProject.Core.Services
             if (page > totalPages || page == 1)
                 page = 1;
             else
-                prevPage = _uriService.GetPage("/Members", page - 1);
+                prevPage = _uriService.GetPage("/Member", page - 1);
 
             if (page < totalPages)
-                nextPage = _uriService.GetPage("/Members", page + 1);
+                nextPage = _uriService.GetPage("/Member", page + 1);
 
 
             var membersList = await _unitOfWork.MemberRepository.GetPageAsync(x => x.Id > 0, quantity, page);
