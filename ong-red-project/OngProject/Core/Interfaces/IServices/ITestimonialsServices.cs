@@ -1,5 +1,6 @@
 ﻿using OngProject.Common;
 using OngProject.Core.DTOs.TestimonialsDTOs;
+using OngProject.Core.Helper.Pagination;
 using System.Threading.Tasks;
 
 namespace OngProject.Core.Interfaces.IServices
@@ -9,5 +10,7 @@ namespace OngProject.Core.Interfaces.IServices
         Task<Result> CreateAsync(TestimonialsCreateDTO testimonialsCreate);
 
         Task<Result> UpdateAsync(TestimonialsUpdateDTO testimonialsUpdate);
+
+        Task<PaginationDTO<TestimonialsDTO>> GetByPagingAsync(int page, int quantity);
     }
 }

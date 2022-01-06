@@ -92,5 +92,38 @@ namespace OngProject.Core.Services
 
             return new Result().Success("Testimonio actualizado con éxito.");
         }
+
+        #region Testimonials Get by paging
+        public async Task<PaginationDTO<TestimonialsDTO>> GetByPagingAsync(int page, int quantity)
+        {
+            var prevPage = string.Empty;
+            var nextPage = string.Empty;
+            var count = await _unitOfWork.TestimonialsRepository.CountAsync();
+            var totalPages = (int)Math.Floor((decimal)count / quantity);
+            if ((count % quantity) > 0)
+                totalPages++;
+
+            if (page > totalPages || page == 1)
+                page = 1;
+            else
+                prevPage = _uriService.GetPage("/Testimonials", page - 1);
+
+            if (page < totalPages)
+                nextPage = _uriService.GetPage("/Testimonials", page + 1);
+
+            var testimonialsList = await _unitOfWork.TestimonialsRepository.GetPageAsync(x => x.Id > 0, quantity, page);
+            var testimonialDto = testimonialsList.Select(x => _mapper.FromTestimonialsToTestimonialsDto(x)).ToList();
+            PaginationDTO<TestimonialsDTO> pagingResponse = new()
+            {
+                CurrentPage = page,
+                TotalItems = count,
+                TotalPages = totalPages,
+                PrevPage = prevPage,
+                NextPage = nextPage,
+                Items = testimonialDto.ToList()
+            };
+            return pagingResponse;
+        }
+        #endregion
     }
 }
