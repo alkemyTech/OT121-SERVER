@@ -45,7 +45,7 @@ namespace OngProject.Controllers
                 if (User.IsInRole("Administrator"))
                     return Ok(await _memberServices.GetAllAsync());
                 if (!page.HasValue)
-                    return BadRequest(new Result().Fail("No existe la página proporcionada."));
+                    return Unauthorized("Usted no esta autorizado.");
 
                 return Ok(await _memberServices.GetAllByPaginationAsync((int)page));
             }
