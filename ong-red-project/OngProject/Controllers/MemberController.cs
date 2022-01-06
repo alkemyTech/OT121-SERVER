@@ -38,18 +38,20 @@ namespace OngProject.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery]int page = 1)
+        public async Task<IActionResult> GetAll([FromQuery]int? page)
         {
             try
             {
                 if (User.IsInRole("Administrator"))
                     return Ok(await _memberServices.GetAllAsync());
+                if (!page.HasValue)
+                    return BadRequest(new Result().Fail("No existe la página proporcionada."));
 
-                return Ok(await _memberServices.GetAllByPaginationAsync(page));
+                return Ok(await _memberServices.GetAllByPaginationAsync((int)page));
             }
             catch (Exception e)
             {
-                return NotFound(new Result().NotFound());
+                return BadRequest(new Result().Fail(e.Message));
             }
         }
 
