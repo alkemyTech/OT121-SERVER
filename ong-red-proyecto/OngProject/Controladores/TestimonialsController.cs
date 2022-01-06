@@ -91,12 +91,10 @@ namespace OngProject.Controllers
         #endregion
         [HttpGet()]
         [Authorize]
-        public async Task<IActionResult> GetAllAsync([FromQuery] int? page)
+        public async Task<IActionResult> GetAllAsync([FromQuery] int page = 1)
         {
             int quantity = 10;
-            if (!page.HasValue)
-                page = 1;
-            return Ok(await _testimonialsServices.GetByPagingAsync((int)page, quantity));
+            return Ok(await _testimonialsServices.GetByPagingAsync(page, quantity));
         }
     }
 }
