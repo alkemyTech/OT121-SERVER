@@ -31,7 +31,7 @@ namespace OngProject.Controllers
         /// <param name="testimonialsCreate">Objeto a crear a la base de datos.</param>
         /// <response code="201">Created. Tarea ejecutada con exito devuelve un mensaje satisfactorio.</response>        
         /// <response code="400">BadRequest. No se ha creado el objeto en la BD. Informa errores de validacion o excepciones.</response>
-        #endregion Documentation
+        #endregion 
 
         [Authorize(Roles = "Administrator")]
         [HttpPost]
@@ -67,7 +67,7 @@ namespace OngProject.Controllers
         /// <response code="200">OK. Tarea ejecutada con exito devuelve un mensaje satisfactorio.</response>
         /// <response code="400">BadRequest. No se ha creado el objeto en la BD. Informa errores de validacion o excepciones.</response>
 
-        #endregion Documentation
+        #endregion 
 
         [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
@@ -97,17 +97,31 @@ namespace OngProject.Controllers
 
         #region Documentacion
         /// <summary>
-        /// Endpoint para obtener un listado de todos los Usuarios
+        /// Obtener una pagina de la lista de testimonios
         /// </summary>
-        /// <response code="200">Solicitud concretada con exito</response>
-        /// <response code="401">Credenciales no validas</response> 
-        #endregion
+        /// <remarks>
+        /// Obtiene un listado de 10 testimonios, debe acceder con credenciales validas.
+        /// </remarks>
+        /// <param name="page">Indica numero de pagina de la lista de testimonios.</param>
+        /// <response code="200">OK. Tarea ejecutada con exito devuelve un mensaje satisfactorio.</response>
+        /// <response code="400">BadRequest. Informa que la pagina no existente.</response>
+        /// <response code="401">Unauthorized. Credenciales no validas</response> 
+
+        #endregion 
+
         [HttpGet()]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+
         public async Task<IActionResult> GetAllAsync([FromQuery] int page = 1)
         {
             int quantity = 10;
-            return Ok(await _testimonialsServices.GetByPagingAsync(page, quantity));
+            var pagination = await _testimonialsServices.GetByPagingAsync(page, quantity);
+            if (pagination == null)
+                return BadRequest(new Result().Fail("La pagina no existente."));
+            return Ok(pagination);
         }
     }
 }
