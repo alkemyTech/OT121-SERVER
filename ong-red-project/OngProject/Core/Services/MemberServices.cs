@@ -66,7 +66,7 @@ namespace OngProject.Core.Services
             var members = await _unitOfWork.MemberRepository.GetAll();
 
             if (!members.Any())
-                throw new Exception();
+                throw new Exception("No hay datos a mostrar.");
 
             var membersDto = members.Select(m => _mapper.FromMembersToMembersDto(m)).ToList();
 
@@ -83,8 +83,8 @@ namespace OngProject.Core.Services
             if ((membersCount % quantity) > 0)
                 totalPages++;
 
-            if (page > totalPages || page == 1)
-                page = 1;
+            if (page > totalPages)
+                throw new Exception("No existe la página proporcionada.");
             else
                 prevPage = _uriService.GetPage("/Member", page - 1);
 
