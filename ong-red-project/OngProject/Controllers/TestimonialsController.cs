@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Common;
 using OngProject.Core.DTOs.TestimonialsDTOs;
@@ -22,22 +23,27 @@ namespace OngProject.Controllers
         #region Documentation
 
         /// <summary>
-        /// Endpoint para crear un testimoniio.
+        /// Crear nuevo testimonio en base de datos.
         /// </summary>
-        /// <response code="200">Tarea ejecutada con exito devuelve un mensaje satisfactorio.</response>
-        /// <response code="400">Errores de validacion o excepciones.</response>
-
+        /// <remarks>
+        /// Para crear un nuevo testimonio en la base de datos, debe acceder como "Administrator"
+        /// </remarks>
+        /// <param name="testimonialsCreate">Objeto a crear a la base de datos.</param>
+        /// <response code="201">Created. Tarea ejecutada con exito devuelve un mensaje satisfactorio.</response>        
+        /// <response code="400">BadRequest. No se ha creado el objeto en la BD. Errores de validacion o excepciones..</response>
         #endregion Documentation
 
         [Authorize(Roles = "Administrator")]
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create([FromForm] TestimonialsCreateDTO testimonialsCreate)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    return Ok(await _testimonialsServices.CreateAsync(testimonialsCreate));
+                    return Created(nameof(GetAllAsync), await _testimonialsServices.CreateAsync(testimonialsCreate));
                 }
                 catch (Exception e)
                 {
