@@ -103,9 +103,10 @@ namespace OngProject.Core.Services
             if ((count % quantity) > 0)
                 totalPages++;
 
-            if (page > totalPages || page == 1)
-                page = 1;
-            else
+            if (page > totalPages)
+                return null;
+            
+            if (page > 1)
                 prevPage = _uriService.GetPage("/Testimonials", page - 1);
 
             if (page < totalPages)
