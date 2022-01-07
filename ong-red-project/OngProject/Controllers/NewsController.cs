@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Common;
 using OngProject.Core.DTOs;
+using OngProject.Core.DTOs.CommentsDTOs;
 using OngProject.Core.DTOs.NewsDTOs;
 using OngProject.Core.Helper.Pagination;
 using OngProject.Core.Interfaces.IServices;
@@ -25,17 +26,20 @@ namespace OngProject.Controllers
         /// Endpoint para listar los comentarios pertenecientes a un post. 
         /// </summary>
         /// <response code="200">Listado de todos los comentarios pertenecientes a un post .</response>
+        /// <response code="400">Contenido inválido.</response>
         /// <response code="401">Credenciales invalidas.</response> 
         /// <response code="404">No se ha encontrado el dato proporcionado.</response>
         #endregion
         [Authorize]
         [HttpGet("{id}/comments")]
-        public async Task<ActionResult> GetAllCommentsByNews(int id)
-        {
-            var result = await _newsServices.GetAllCommentsByNews(id);
-            if (result == null)
-                return NotFound("No existe el post");
-            return Ok(result);
+        public async Task<ActionResult> GetAllCommentsByNews(int id, int page)
+        {            
+            ResultValue<PaginationDTO<CommentResponseDTO>> result = await _newsServices.GetAllCommentsUsingPaging(id, page);
+            if(result.HasErrors)
+                 return StatusCode(result.StatusCode, result.Messages[0]);
+
+            return StatusCode(result.StatusCode, result.Value);
+            
         }
 
         #region Documentacion

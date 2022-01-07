@@ -11,6 +11,8 @@ using OngProject.Core.Helper.Pagination;
 using System;
 using System.Linq;
 using OngProject.Core.DTOs.NewsDTOs;
+using System.Collections.Generic;
+using OngProject.Core.DTOs.CommentsDTOs;
 
 namespace OngProject.Core.Services
 {
@@ -44,6 +46,7 @@ namespace OngProject.Core.Services
             return (await _unitOfWork.CommentsRepository.GetAll())
                 .Where(n => n.NewId == id).ToArray();
         }
+        
         #region Get all data from news by Id
         public async Task<News> GetAllDataByIdAsync(int id)
         {
@@ -87,6 +90,62 @@ namespace OngProject.Core.Services
             }
             return null;
         }
+
+        public async Task<ResultValue<PaginationDTO<CommentResponseDTO>>> GetAllCommentsUsingPaging(int id, int page)
+        {
+            var exists = _unitOfWork.NewsRepository.EntityExists(id);
+            if(!exists)
+            {
+                return new ResultValue<PaginationDTO<CommentResponseDTO>>(){
+                    Messages = new List<string> () {$"La entidad con Id {id} no existe"},
+                    HasErrors = true,
+                    StatusCode = 400
+                };
+            }
+
+            var newsCount = (await _unitOfWork.CommentsRepository.GetAll())
+                .Where(n => n.NewId == id).Count();
+
+            int totalPages = (newsCount/10) + 1;
+            if(newsCount == 0 || totalPages < page || page < 1)
+            {
+                return new ResultValue<PaginationDTO<CommentResponseDTO>>(){
+                    Messages = new List<string> () {$"La página número {page} no existe"},
+                    HasErrors = true,
+                    StatusCode = 400
+                };
+            }
+            
+            IEnumerable<Comments> pageContent = await _unitOfWork
+                .CommentsRepository.GetPageAsync(c => c.Id, 10, page);
+            List<CommentResponseDTO> dtosList = pageContent
+                .Where(c => c.NewId == id)
+                .Select(c => _entityMapper.FromCommentsToCommentResponseDTO(c))
+                .ToList();
+
+            string nextPage = "", prevPage= "";
+            
+            if(page < totalPages)
+               nextPage = _uriService.GetPage("/news", page+1);
+            if(page > 1)
+               prevPage = _uriService.GetPage("/news", page-1);
+            
+            var result = new PaginationDTO<CommentResponseDTO>(){
+                CurrentPage = page,
+                TotalItems = 10,
+                TotalPages = totalPages,
+                PrevPage = prevPage,
+                NextPage = nextPage,
+                Items = dtosList
+            };
+
+            return new ResultValue<PaginationDTO<CommentResponseDTO>>(){
+                Value =  result,
+                HasErrors = false,
+                StatusCode = 200
+            };
+        }
+
         #endregion
     }
 }
