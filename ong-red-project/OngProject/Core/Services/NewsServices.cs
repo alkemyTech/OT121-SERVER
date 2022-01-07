@@ -132,7 +132,7 @@ namespace OngProject.Core.Services
             
             var result = new PaginationDTO<CommentResponseDTO>(){
                 CurrentPage = page,
-                TotalItems = 10,
+                TotalItems = newsCount,
                 TotalPages = totalPages,
                 PrevPage = prevPage,
                 NextPage = nextPage,
