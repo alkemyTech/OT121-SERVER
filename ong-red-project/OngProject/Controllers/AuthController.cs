@@ -32,14 +32,19 @@ namespace OngProject.Controllers
         #region Documentation
 
         /// <summary>
-        /// Endpoint para registrar un usuario.
+        /// Registra un usuario.
         /// </summary>
-        /// <response code="200">Tarea ejecutada con exito devuelve el usuario registrado.</response>
-        /// <response code="400">Errores de validacion.</response>
-
+        /// <remarks>
+        /// Registra un nuevo usuario en la base de datos.
+        /// </remarks>
+        /// <param name="newUser">Objeto a crear en la base de datos.</param>
+        /// <response code="200">Ok. Tarea ejecutada con exito devuelve un mensaje satisfactorio.</response>        
+        /// <response code="400">BadRequest. No se ha creado el objeto en la BD. Informa errores de validacion o excepciones.</response>
         #endregion Documentation
 
         [HttpPost("register")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RegisterAsync(UserRegistrationDTO newUser)
         {
             var result = await _userServices.UserExistsByEmail(newUser.Email);
@@ -63,14 +68,20 @@ namespace OngProject.Controllers
         #region Documentation
 
         /// <summary>
-        /// Endpoint para loguear un usuario.
+        /// Acceso de usuarios.
         /// </summary>
-        /// <response code="200">Tarea ejecutada con exito devuelve el usuario logueado y genera un token unico para el usuario.</response>
-        /// <response code="400">Errores de validación.</response>
+        /// <remarks>
+        /// Permite acceso a usuarios registrados en la base de datos.
+        /// </remarks>
+        /// <param name="userLogin">Objeto con Email y contraseña.</param>
+        /// <response code="200">Ok. Tarea ejecutada con exito. Devuelve datos del usuario y su Token.</response>        
+        /// <response code="400">BadRequest. Informa errores de validacion o excepciones.</response>
 
         #endregion Documentation
 
         [HttpPost("Login")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> LoginAsync(UserLoginRequestDTO userLogin)
         {
             try
@@ -90,12 +101,14 @@ namespace OngProject.Controllers
         /// <summary>
         /// Endpoint para obtener los datos de un usuario por medio de un token.
         /// </summary>
-        /// <response code="200">Tarea ejecutada con exito devuelve el profile del usuario por medio del Token.</response>
-        /// <response code="400">Errores de validación.</response>
+        /// <response code="200">OK. Tarea ejecutada con exito devuelve el profile del usuario por medio del Token.</response>
+        /// <response code="400">BadRequest. Informa errores de validacion o excepciones.</response>
 
         #endregion Documentation
         [Authorize]
         [HttpGet("me")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ProfileAsync()
         {
             try

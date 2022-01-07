@@ -61,16 +61,49 @@ namespace OngProject.Core.Services
             return new Result().Success("Datos guardados satisfactoriamente.");
         }
 
-        public async Task<List<MembersDTO>> GetAllAsync()
+        public async Task<ResultValue<List<MembersDTO>>> GetAllAsync()
         {
             var members = await _unitOfWork.MemberRepository.GetAll();
-
-            if (members == null)
-                throw new Exception("No se encontraron datos.");
+            if (!members.Any())
+                return new ResultValue<List<MembersDTO>>() { HasErrors = true, StatusCode = 400, Messages = new List<string>() { "No hay datos a mostrar." } };
 
             var membersDto = members.Select(m => _mapper.FromMembersToMembersDto(m)).ToList();
+            return new ResultValue<List<MembersDTO>>() { StatusCode = 200, Value = membersDto }; ;
+        }
 
-            return membersDto;
+        public async Task<ResultValue<PaginationDTO<MembersDTO>>> GetAllByPaginationAsync(int page)
+        {
+            int quantity = 10;
+            var prevPage = string.Empty;
+            var nextPage = string.Empty;
+            var membersCount = await _unitOfWork.MemberRepository.CountAsync();
+            var totalPages = (int)Math.Floor((decimal)membersCount / quantity);
+            if ((membersCount % quantity) > 0)
+                totalPages++;
+
+            if (page > totalPages)
+                return new ResultValue<PaginationDTO<MembersDTO>>() { HasErrors = true, StatusCode = 400, Messages = new List<string>() { "No existe la página proporcionada." } };
+            else if(page > 1)
+                prevPage = _uriService.GetPage("/Member", page - 1);
+
+            if (page < totalPages)
+                nextPage = _uriService.GetPage("/Member", page + 1);
+
+
+            var membersList = await _unitOfWork.MemberRepository.GetPageAsync(x => x.Id > 0, quantity, page);
+
+            var membersDto = membersList.Select(m => _mapper.FromMembersToMembersDto(m)).ToList();
+
+            PaginationDTO<MembersDTO> pagingResponse = new()
+            {
+                CurrentPage = page,
+                TotalItems = membersCount,
+                TotalPages = totalPages,
+                PrevPage = prevPage,
+                NextPage = nextPage,
+                Items = membersDto.ToList()
+            };
+            return new ResultValue<PaginationDTO<MembersDTO>>() { StatusCode = 200, Value = pagingResponse };
         }
 
         public async Task<Result> UpdateAsync(MemberUpdateDTO memberUpdate)
