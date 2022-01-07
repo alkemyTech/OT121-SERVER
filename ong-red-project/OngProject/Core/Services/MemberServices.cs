@@ -61,19 +61,17 @@ namespace OngProject.Core.Services
             return new Result().Success("Datos guardados satisfactoriamente.");
         }
 
-        public async Task<List<MembersDTO>> GetAllAsync()
+        public async Task<ResultValue<List<MembersDTO>>> GetAllAsync()
         {
             var members = await _unitOfWork.MemberRepository.GetAll();
-
             if (!members.Any())
-                throw new Exception("No hay datos a mostrar.");
+                return new ResultValue<List<MembersDTO>>() { HasErrors = true, StatusCode = 400, Messages = new List<string>() { "No hay datos a mostrar." } };
 
             var membersDto = members.Select(m => _mapper.FromMembersToMembersDto(m)).ToList();
-
-            return membersDto;
+            return new ResultValue<List<MembersDTO>>() { StatusCode = 200, Value = membersDto }; ;
         }
 
-        public async Task<PaginationDTO<MembersDTO>> GetAllByPaginationAsync(int page)
+        public async Task<ResultValue<PaginationDTO<MembersDTO>>> GetAllByPaginationAsync(int page)
         {
             int quantity = 10;
             var prevPage = string.Empty;
@@ -84,8 +82,8 @@ namespace OngProject.Core.Services
                 totalPages++;
 
             if (page > totalPages)
-                throw new Exception("No existe la página proporcionada.");
-            else
+                return new ResultValue<PaginationDTO<MembersDTO>>() { HasErrors = true, StatusCode = 400, Messages = new List<string>() { "No existe la página proporcionada." } };
+            else if(page > 1)
                 prevPage = _uriService.GetPage("/Member", page - 1);
 
             if (page < totalPages)
@@ -105,7 +103,7 @@ namespace OngProject.Core.Services
                 NextPage = nextPage,
                 Items = membersDto.ToList()
             };
-            return pagingResponse;
+            return new ResultValue<PaginationDTO<MembersDTO>>() { StatusCode = 200, Value = pagingResponse };
         }
 
         public async Task<Result> UpdateAsync(MemberUpdateDTO memberUpdate)

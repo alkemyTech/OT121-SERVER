@@ -8,8 +8,8 @@ namespace OngProject.Core.Interfaces.IServices
 {
     public interface IMemberServices
     {
-        Task<List<MembersDTO>> GetAllAsync();
-        Task<PaginationDTO<MembersDTO>> GetAllByPaginationAsync(int page);
+        Task<ResultValue<List<MembersDTO>>> GetAllAsync();
+        Task<ResultValue<PaginationDTO<MembersDTO>>> GetAllByPaginationAsync(int page);
 
         Task<Result> CreateAsync(MemberInsertDTO newMember);
 
