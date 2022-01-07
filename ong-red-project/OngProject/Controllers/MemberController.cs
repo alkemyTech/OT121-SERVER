@@ -53,7 +53,10 @@ namespace OngProject.Controllers
         {
 
             if (User.IsInRole("Administrator"))
-                return Ok(await _memberServices.GetAllAsync());
+            {
+                var resultAdmin = await _memberServices.GetAllAsync();
+                return StatusCode(resultAdmin.StatusCode, resultAdmin);
+            }
             if (!page.HasValue)
                 return StatusCode(403, new ResultValue<IActionResult>() { StatusCode = 403, HasErrors = true, Messages = new List<string>() { "Usted no posee permisos sobre este recurso." } });
             
