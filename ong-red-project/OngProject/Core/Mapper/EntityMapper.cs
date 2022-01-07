@@ -233,6 +233,15 @@ namespace OngProject.Core.Mapper
             };
         }
 
+        public CommentResponseDTO FromCommentsToCommentResponseDTO(Comments comments)
+        {
+            return new CommentResponseDTO()
+            {
+                UserId = comments.UserId,
+                Body = comments.Body
+            };
+        }
+
         #endregion Comments Mappers
 
         #region Categories Mappers
