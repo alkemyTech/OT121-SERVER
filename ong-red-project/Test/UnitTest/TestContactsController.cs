@@ -7,6 +7,7 @@ using OngProject.Core.DTOs;
 using OngProject.Core.Interfaces.IServices;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -82,6 +83,23 @@ namespace Test.UnitTest
         }
         #endregion
 
-       
+        #region Test method ContactsAsync
+        [TestMethod]
+        public async Task Post_Should_Return_Action_Ok()
+        {
+            // arrange
+            _contactsServices.Setup(a => a.RegisterAsync(contactDTO)).ReturnsAsync(contactDTO);
+            var expected = StatusCodes.Status200OK;
+
+            var controller = new ContactsController(_contactsServices.Object, _mailService.Object);
+            // act
+            var response = await controller.ContactsAsync(contactDTO);
+            // assert
+
+            var resp = (ObjectResult)response;
+            Assert.AreEqual(expected, resp.StatusCode);
+        }
+
+        #endregion
     }
 }
