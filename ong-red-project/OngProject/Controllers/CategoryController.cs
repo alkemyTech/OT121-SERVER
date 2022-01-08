@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Common;
 using OngProject.Core.DTOs.CategoriesDTOs;
+using OngProject.Core.Helper.Pagination;
 using OngProject.Core.Interfaces.IServices;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace OngProject.Controllers
     {
         #region Object and Constructor
         private readonly ICategoriesServices _CategoriesServices;
+        private const int QUANTITY = 10;
         public CategoryController(ICategoriesServices CategoriesServices)
         {
             _CategoriesServices = CategoriesServices;
@@ -34,27 +36,23 @@ namespace OngProject.Controllers
         }
 
         /// <summary>
-        /// Endpoint para obtener los nombres de categorias como administrador
+        /// Obtener una pagina de la lista de categorias como usuario.
         /// </summary>
-        /// <response code="200">Lista de todos los nombres de categoria.</response>
-        /// <response code="404">No se encuentran categorias</response>
-        /// <response code="401">Credenciales no validas</response> 
-        [Authorize(Roles = "Administrator")]
+        /// <remarks>
+        /// Obtiene un listado de 10 categorias, debe acceder con credenciales validas.
+        /// </remarks>
+        /// <param name="page">Indica numero de pagina de la lista de categorias.</param>
+        /// <response code="200">OK. Tarea ejecutada con exito devuelve un mensaje satisfactorio.</response>
+        /// <response code="400">BadRequest. Informa que la pagina no existente.</response>
+        /// <response code="401">Unauthorized. Credenciales no validas</response> 
+        [Authorize/*(Roles = "Administrator")*/]
         [HttpGet]
-        public async Task<ActionResult> GetCategories()
+        public async Task<ActionResult> GetAllAsync([FromQuery] int page = 1)
         {
-            var categories = await _CategoriesServices.GetCategories();
-            if (categories.Length > 0)
-            {
-                return StatusCode(200, categories);
-            }
-            return StatusCode(404, new
-            {
-                Messages = new string[]{
-                    String.Format("No se encuentran categorias.}")
-                },
-                HasErrors = false
-            });
+            var categories = await _CategoriesServices.GetByPagingAsync(page, QUANTITY);
+            if (categories.Items.Count() == 0)
+                return BadRequest(new ResultValue<PaginationDTO<string>>(){Messages = new List<string>(){"La pagina no existente."}, HasErrors = true, StatusCode = 400});  
+            return Ok(new ResultValue<PaginationDTO<string>>(){StatusCode = 200, Value = categories});
         }
 
         /// <summary>

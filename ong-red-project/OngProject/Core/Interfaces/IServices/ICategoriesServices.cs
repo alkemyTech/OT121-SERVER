@@ -1,6 +1,7 @@
 ﻿using OngProject.Common;
 using OngProject.Core.DTOs.CategoriesDTOs;
 using OngProject.Core.Entities;
+using OngProject.Core.Helper.Pagination;
 using System;
 using System.Threading.Tasks;
 
@@ -9,7 +10,7 @@ namespace OngProject.Core.Interfaces.IServices
     public interface ICategoriesServices
     {
         Task<Result> Delete(int id);
-        Task<string[]> GetCategories();
+        Task<PaginationDTO<string>> GetByPagingAsync(int page, int quantity);
         Task<CategoryGetDTO> Get(int id);
         Task<bool> ExistsByName(CategoryInsertDTO category);
         Task<Category> FindById(Int32 id);
