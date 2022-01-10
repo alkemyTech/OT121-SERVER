@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Common;
 using OngProject.Core.DTOs.CategoriesDTOs;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 namespace OngProject.Controllers
 {
     [Route("[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -39,12 +41,21 @@ namespace OngProject.Controllers
         /// Obtener una pagina de la lista de categorias como usuario.
         /// </summary>
         /// <remarks>
-        /// Obtiene un listado de 10 categorias, debe acceder con credenciales validas.
+        /// Obtiene un listado de 10 categorias.
+        /// Debe acceder con credenciales validas.
+        ///
+        /// Ejemplo de Solicitud:
+        ///    
+        ///     GET: /Category?page=1
+        ///
         /// </remarks>
         /// <param name="page">Indica numero de pagina de la lista de categorias.</param>
         /// <response code="200">OK. Tarea ejecutada con exito devuelve un mensaje satisfactorio.</response>
         /// <response code="400">BadRequest. Informa que la pagina no existente.</response>
-        /// <response code="401">Unauthorized. Credenciales no validas</response> 
+        /// <response code="401">Unauthorized. Credenciales no validas</response>
+        [ProducesResponseType(typeof(ResultValue<PaginationDTO<string>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResultValue<PaginationDTO<string>>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status401Unauthorized)]
         [Authorize/*(Roles = "Administrator")*/]
         [HttpGet]
         public async Task<ActionResult> GetAllAsync([FromQuery] int page = 1)
