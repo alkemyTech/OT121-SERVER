@@ -26,7 +26,7 @@ namespace Test.UnitTest
             Message = "Probando",
             Phone = 12345
         };
-
+        
         #region Test method Get
         [TestMethod]
         public async Task Get_Should_Return_Action_Ok()
@@ -38,7 +38,7 @@ namespace Test.UnitTest
             _contactsServices.Setup(b => b.GetById(id)).ReturnsAsync(contactDTO);
             var expected = StatusCodes.Status200OK;
 
-            var controller = new OngProject.Controllers.ContactsController(_contactsServices.Object, _mailService.Object);
+            var controller = new ContactsController(_contactsServices.Object, _mailService.Object);
             // act
             var response = await controller.Get(id);
             // assert
@@ -56,7 +56,7 @@ namespace Test.UnitTest
             _contactsServices.Setup(b => b.GetById(id)).ReturnsAsync(contactDTO);
             var expected = StatusCodes.Status404NotFound;
 
-            var controller = new OngProject.Controllers.ContactsController(_contactsServices.Object, _mailService.Object);
+            var controller = new ContactsController(_contactsServices.Object, _mailService.Object);
             // act
             var response = await controller.Get(id);
             // assert
@@ -71,10 +71,10 @@ namespace Test.UnitTest
             int id = 1;
 
             _contactsServices.Setup(a => a.EntityExists(id)).Returns(true);
-            object p = _contactsServices.Setup(b => b.GetById(id)).Throws(new Exception("my exception"));
+            _contactsServices.Setup(b => b.GetById(id)).Throws(new Exception("my exception"));
             var expected = StatusCodes.Status400BadRequest;
 
-            var controller = new OngProject.Controllers.ContactsController(_contactsServices.Object, _mailService.Object);
+            var controller = new ContactsController(_contactsServices.Object, _mailService.Object);
             // act
             var response = await controller.Get(id);
             // assert
@@ -85,7 +85,7 @@ namespace Test.UnitTest
 
         #region Test method ContactsAsync
         [TestMethod]
-        public async Task Post_Should_Return_Action_Ok()
+        public async Task ContactsAsync_Should_Return_Action_Ok()
         {
             // arrange
             _contactsServices.Setup(a => a.RegisterAsync(contactDTO)).ReturnsAsync(contactDTO);
@@ -101,5 +101,95 @@ namespace Test.UnitTest
         }
 
         #endregion
+
+        #region Test method GetAllAsync
+        [TestMethod]
+        public async Task GetAllAsync_Should_Return_Action_Ok()
+        {
+            // arrange
+            var contactDtoList = new List<ContactDTO>() { contactDTO, contactDTO };
+            _contactsServices.Setup(b => b.GetAll()).ReturnsAsync(contactDtoList);
+            var expected = StatusCodes.Status200OK;
+
+            var controller = new ContactsController(_contactsServices.Object, _mailService.Object);
+            // act
+            var response = await controller.GetAllAsync();
+            // assert
+            var resp = (ObjectResult)response;
+            Assert.AreEqual(expected, resp.StatusCode);
+        }
+        #endregion
+
+        #region Test Dto ContactDTO
+        [TestMethod]
+        public void ContactDTO_Should_Return_Name_Field_Is_Required()
+        {
+            // arrange
+            var expectedMessage = "The Name field is required.";
+            var expectedCount= 1;
+            ContactDTO contactDTOFail = new ContactDTO()
+            {
+                Email = "dto@dto.com",
+                Message = "Probando",
+                Phone = 12345
+            };
+            var result = new List<ValidationResult>();
+            var validationContext = new ValidationContext(contactDTOFail);
+
+            // act
+            Validator.TryValidateObject(contactDTOFail, validationContext, result);
+
+            // assert
+            Assert.AreEqual(expectedCount, result.Count());
+            Assert.AreEqual(expectedMessage, result.FirstOrDefault().ErrorMessage);
+        }
+        [TestMethod]
+        public void ContactDTO_Should_Return_Email_Field_Is_Required()
+        {
+            // arrange
+            var expectedMessage = "The Email field is required.";
+            var expectedCount = 1;
+            ContactDTO contactDTOFail = new ContactDTO()
+            {
+                Name = "Test",
+                Message = "Probando",
+                Phone = 12345
+            };
+            var result = new List<ValidationResult>();
+            var validationContext = new ValidationContext(contactDTOFail);
+
+            // act
+            Validator.TryValidateObject(contactDTOFail, validationContext, result);
+
+            // assert
+            Assert.AreEqual(expectedCount, result.Count());
+            Assert.AreEqual(expectedMessage, result.FirstOrDefault().ErrorMessage);
+        }
+        [TestMethod]
+        public void ContactDTO_Should_Return_Name_Field_Is_Required_And_Email_Field_Is_Required()
+        {
+            // arrange
+            var expectedMessageName = "The Name field is required.";
+            var expectedMessageEmail = "The Email field is required.";
+            var expectedCount = 2;
+            ContactDTO contactDTOFail = new ContactDTO()
+            {
+                Message = "Probando",
+                Phone = 12345
+            };
+            var result = new List<ValidationResult>();
+            var validationContext = new ValidationContext(contactDTOFail);
+
+            // act
+            Validator.TryValidateObject(contactDTOFail, validationContext, result);
+
+            // assert
+            Assert.AreEqual(expectedCount, result.Count());
+            Assert.AreEqual(expectedMessageName, result.FirstOrDefault().ErrorMessage);
+            Assert.AreEqual(expectedMessageEmail, result.LastOrDefault().ErrorMessage);
+        }
+        #endregion
+
+
     }
 }
