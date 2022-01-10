@@ -121,7 +121,7 @@ namespace OngProject
                         context.Response.StatusCode = 500;
                         context.Response.ContentType = "application/json";
 
-                        string response = JsonConvert.SerializeObject(new Result().Fail("El token de acceso proporcionado no es válido."));
+                        string response = JsonConvert.SerializeObject(new Result().Fail("El token de acceso proporcionado no es vï¿½lido."));
                         if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
                         {
                             context.Response.Headers.Add("Token-Expired", "true");
@@ -196,7 +196,11 @@ namespace OngProject
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OngProject v1"));
+                app.UseSwaggerUI(c => {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "OngProject v1");
+                    c.RoutePrefix = "api/docs";
+                });
+                
             }
             //app.UseMiddleware<OwnerShipMiddleware>();
 
