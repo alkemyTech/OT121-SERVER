@@ -26,14 +26,30 @@ namespace OngProject.Controllers
         }
         #endregion
 
-
+        /// <summary>
+        /// Eliminar una categoria existente como usuario administrador.
+        /// </summary>
+        /// <remarks>
+        /// Eliminar una categoria existente.
+        /// El tipo de usuario debe ser administrador.
+        ///
+        /// Ejemplo de Solicitud:
+        ///    
+        ///     DELETE: /Category/1
+        ///
+        /// </remarks>
+        /// <response code="200">OK. Tarea ejecutada con exito devuelve un mensaje satisfactorio.</response>
+        /// <response code="400">La categoria ingresada es invalida.</response>
+        [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Result>> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var request = await _CategoriesServices.Delete(id);
 
             return request.HasErrors
-                ? BadRequest(request.Messages)
+                ? BadRequest(request)
                 : Ok(request);
         }
 

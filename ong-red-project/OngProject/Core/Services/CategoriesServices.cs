@@ -49,7 +49,7 @@ namespace OngProject.Core.Services
                 //await _imageServices.Delete(ulr);
                 return new Result().Success("Category eliminado con exito");
             }
-            return new Result().Fail("Ocurrio un error al eliminar el testimonial");
+            return new Result().Fail("Ocurrio un error al eliminar la categoria.");
         }
 
         public async Task<PaginationDTO<string>> GetByPagingAsync(int page, int quantity)
