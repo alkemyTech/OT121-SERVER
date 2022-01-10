@@ -158,9 +158,19 @@ namespace OngProject.Controllers
         /// <summary>
         /// Endpoint para editar una categoria como administrador
         /// </summary>
+        /// <remarks>
+        /// Endpoint para editar una categoria.
+        /// El tipo de usuario debe ser administrador.
+        /// 
+        ///     PUT: /Category
+        /// 
+        /// </remarks>
         /// <response code="200">Categoria editada exitosamente.</response>
         /// <response code="404">No se encontro la categoria.</response>
         /// <response code="401">Usted no esta autorizado.</response>
+        [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status401Unauthorized)]
         [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public async Task<ActionResult> Update([FromForm] CategoryUpdateDTO newCategoryInfo, int id)
