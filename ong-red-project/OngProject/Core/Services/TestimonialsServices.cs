@@ -96,6 +96,8 @@ namespace OngProject.Core.Services
         #region Testimonials Get by paging
         public async Task<PaginationDTO<TestimonialsDTO>> GetByPagingAsync(int page, int quantity)
         {
+            if(page < 1 || quantity < 1)
+                return null;
             var prevPage = string.Empty;
             var nextPage = string.Empty;
             var count = await _unitOfWork.TestimonialsRepository.CountAsync();
