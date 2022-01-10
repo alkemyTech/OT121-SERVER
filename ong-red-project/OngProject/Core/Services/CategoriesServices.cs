@@ -18,12 +18,14 @@ namespace OngProject.Core.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IImageService _imageServices;
+        private readonly IUriService _uriService;
         private readonly EntityMapper _entityMapper;
 
-        public CategoriesServices(IUnitOfWork unitOfWork, IImageService imageServices)
+        public CategoriesServices(IUnitOfWork unitOfWork, IImageService imageServices, IUriService uriService)
         {
             _unitOfWork = unitOfWork;
             _imageServices = imageServices;
+            _uriService = uriService;
             _entityMapper = new EntityMapper();
         }
 
@@ -50,10 +52,32 @@ namespace OngProject.Core.Services
             return new Result().Fail("Ocurrio un error al eliminar el testimonial");
         }
 
-        public async Task<string[]> GetCategories()
+        public async Task<PaginationDTO<string>> GetByPagingAsync(int page, int quantity)
         {
-            return (await _unitOfWork.CategoryRepository.GetAll())
-            .Select(c => c.Name).ToArray();
+            //return (await _unitOfWork.CategoryRepository.GetAll())
+            //.Select(c => c.Name).ToArray();
+
+            var totalItems = await _unitOfWork.CategoryRepository.CountAsync();
+            var totalPages = (int)Math.Floor((decimal)totalItems / page);
+
+            if(page > totalPages)
+                return null;
+
+            var categoriesByName = (await _unitOfWork
+                .CategoryRepository.GetPageAsync(c => c.Name, quantity, page))
+                .Select(c => c.Name).ToList<string>();
+
+            var pagingResponse = new PaginationDTO<string>()
+            {
+                CurrentPage = page,
+                TotalItems = totalItems,
+                TotalPages = totalItems % quantity > 0 ? totalItems+1 : totalPages,
+                PrevPage = page > 1 ?_uriService.GetPage("/Category", page - 1) : String.Empty,
+                NextPage = page < totalPages ? _uriService.GetPage("/Category", page + 1) : String.Empty,
+                Items = categoriesByName
+            };
+
+            return pagingResponse;
         }
 
         public async Task<CategoryGetDTO> Get(int id)
