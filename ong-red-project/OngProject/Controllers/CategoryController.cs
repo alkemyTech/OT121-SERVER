@@ -121,19 +121,38 @@ namespace OngProject.Controllers
         /// <summary>
         /// Endpoint para crear una categoria como administrador
         /// </summary>
+        /// <remarks>
+        /// Endpoint para crear una categoria.
+        /// El tipo de usuario debe ser administrador.
+        /// 
+        ///     POST: /Category
+        /// 
+        /// </remarks>
         /// <response code="201">Categoria creada exitosamente.</response>
         /// <response code="400">Errores de validacion.</response>
         /// <response code="401">Usted no esta autorizado.</response>
-        /// <response code="500">Problemas internos del servidor.</response> 
+        /// <response code="500">Problemas internos del servidor.</response>
+        [ProducesResponseType(typeof(ResultValue<CategoryGetDTO>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
         [Authorize(Roles = "Administrator")]
         [HttpPost]
-        public async Task<ActionResult> Insert([FromForm] CategoryInsertDTO newCategory){
+        public async Task<IActionResult> Insert([FromForm] CategoryInsertDTO newCategory){
             bool exists = await _CategoriesServices.ExistsByName(newCategory);
+
             if(exists){
                 return StatusCode(400,new Result().Fail("La categoria ya existe."));
             }
+
             var category = await _CategoriesServices.Insert(newCategory);
-            return category != null ? StatusCode(201, category) : StatusCode(500, new Result().Fail("No se logro crear. Problemas del servidor"));
+
+            return category != null ? 
+                StatusCode(201,
+                    new ResultValue<CategoryGetDTO>(){Value = category, StatusCode = StatusCodes.Status201Created}) :
+                StatusCode(500,
+                    new Result().Fail("No se logro crear. Problemas del servidor")
+                );
         }
 
         /// <summary>
