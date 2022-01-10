@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OngProject.Common;
 using OngProject.Core.DTOs.CategoriesDTOs;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 namespace OngProject.Controllers
 {
     [Route("[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -24,14 +26,30 @@ namespace OngProject.Controllers
         }
         #endregion
 
-
+        /// <summary>
+        /// Eliminar una categoria existente como usuario administrador.
+        /// </summary>
+        /// <remarks>
+        /// Eliminar una categoria existente.
+        /// El tipo de usuario debe ser administrador.
+        ///
+        /// Ejemplo de Solicitud:
+        ///    
+        ///     DELETE: /Category/1
+        ///
+        /// </remarks>
+        /// <response code="200">OK. Tarea ejecutada con exito devuelve un mensaje satisfactorio.</response>
+        /// <response code="400">La categoria ingresada es invalida.</response>
+        [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Result>> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var request = await _CategoriesServices.Delete(id);
 
             return request.HasErrors
-                ? BadRequest(request.Messages)
+                ? BadRequest(request)
                 : Ok(request);
         }
 
@@ -39,12 +57,21 @@ namespace OngProject.Controllers
         /// Obtener una pagina de la lista de categorias como usuario.
         /// </summary>
         /// <remarks>
-        /// Obtiene un listado de 10 categorias, debe acceder con credenciales validas.
+        /// Obtiene un listado de 10 categorias.
+        /// Debe acceder con credenciales validas.
+        ///
+        /// Ejemplo de Solicitud:
+        ///    
+        ///     GET: /Category?page=1
+        ///
         /// </remarks>
         /// <param name="page">Indica numero de pagina de la lista de categorias.</param>
         /// <response code="200">OK. Tarea ejecutada con exito devuelve un mensaje satisfactorio.</response>
         /// <response code="400">BadRequest. Informa que la pagina no existente.</response>
-        /// <response code="401">Unauthorized. Credenciales no validas</response> 
+        /// <response code="401">Unauthorized. Credenciales no validas</response>
+        [ProducesResponseType(typeof(ResultValue<PaginationDTO<string>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResultValue<PaginationDTO<string>>), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status401Unauthorized)]
         [Authorize/*(Roles = "Administrator")*/]
         [HttpGet]
         public async Task<ActionResult> GetAllAsync([FromQuery] int page = 1)
@@ -58,41 +85,92 @@ namespace OngProject.Controllers
         /// <summary>
         /// Endpoint para obtener una categoria como administrador
         /// </summary>
+        /// <remarks>
+        /// Endpoint para obtener una categoria
+        /// El usuario debe ser como administrador
+        /// Ejemplo de solicitud:
+        ///
+        ///     GET: /Category/1
+        ///
+        /// </remarks>
         /// <response code="200">Se encontro la categoria deseada</response>
         /// <response code="404">No se encuentra la categoria deseada</response>
-        /// <response code="401">Credenciales no validas</response> 
+        /// <response code="401">Credenciales no validas</response>
+        [ProducesResponseType(typeof(ResultValue<CategoryGetDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResultValue<CategoryGetDTO>), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status401Unauthorized)]
         [Authorize(Roles = "Administrator")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Result>> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
             var category = await _CategoriesServices.Get(id);
-            return category != null ? Ok(category) : NotFound();
+            return category != null ?
+                Ok(new ResultValue<CategoryGetDTO>()
+                {
+                    Value = category,
+                    StatusCode = StatusCodes.Status200OK
+                }) :
+                NotFound(new ResultValue<CategoryGetDTO>()
+                {
+                    HasErrors = true,
+                    Messages = new List<string>() { "No se encuentra la categoria deseada" },
+                    StatusCode = StatusCodes.Status404NotFound
+                });
         }
 
         /// <summary>
         /// Endpoint para crear una categoria como administrador
         /// </summary>
+        /// <remarks>
+        /// Endpoint para crear una categoria.
+        /// El tipo de usuario debe ser administrador.
+        /// 
+        ///     POST: /Category
+        /// 
+        /// </remarks>
         /// <response code="201">Categoria creada exitosamente.</response>
         /// <response code="400">Errores de validacion.</response>
         /// <response code="401">Usted no esta autorizado.</response>
-        /// <response code="500">Problemas internos del servidor.</response> 
+        /// <response code="500">Problemas internos del servidor.</response>
+        [ProducesResponseType(typeof(ResultValue<CategoryGetDTO>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status500InternalServerError)]
         [Authorize(Roles = "Administrator")]
         [HttpPost]
-        public async Task<ActionResult> Insert([FromForm] CategoryInsertDTO newCategory){
+        public async Task<IActionResult> Insert([FromForm] CategoryInsertDTO newCategory){
             bool exists = await _CategoriesServices.ExistsByName(newCategory);
+
             if(exists){
                 return StatusCode(400,new Result().Fail("La categoria ya existe."));
             }
+
             var category = await _CategoriesServices.Insert(newCategory);
-            return category != null ? StatusCode(201, category) : StatusCode(500, new Result().Fail("No se logro crear. Problemas del servidor"));
+
+            return category != null ? 
+                StatusCode(201,
+                    new ResultValue<CategoryGetDTO>(){Value = category, StatusCode = StatusCodes.Status201Created}) :
+                StatusCode(500,
+                    new Result().Fail("No se logro crear. Problemas del servidor")
+                );
         }
 
         /// <summary>
         /// Endpoint para editar una categoria como administrador
         /// </summary>
+        /// <remarks>
+        /// Endpoint para editar una categoria.
+        /// El tipo de usuario debe ser administrador.
+        /// 
+        ///     PUT: /Category
+        /// 
+        /// </remarks>
         /// <response code="200">Categoria editada exitosamente.</response>
         /// <response code="404">No se encontro la categoria.</response>
         /// <response code="401">Usted no esta autorizado.</response>
+        [ProducesResponseType(typeof(Result), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status401Unauthorized)]
         [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public async Task<ActionResult> Update([FromForm] CategoryUpdateDTO newCategoryInfo, int id)
