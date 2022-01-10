@@ -69,15 +69,37 @@ namespace OngProject.Controllers
         /// <summary>
         /// Endpoint para obtener una categoria como administrador
         /// </summary>
+        /// <remarks>
+        /// Endpoint para obtener una categoria
+        /// El usuario debe ser como administrador
+        /// Ejemplo de solicitud:
+        ///
+        ///     GET: /Category/1
+        ///
+        /// </remarks>
         /// <response code="200">Se encontro la categoria deseada</response>
         /// <response code="404">No se encuentra la categoria deseada</response>
-        /// <response code="401">Credenciales no validas</response> 
+        /// <response code="401">Credenciales no validas</response>
+        [ProducesResponseType(typeof(ResultValue<CategoryGetDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResultValue<CategoryGetDTO>), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Result), StatusCodes.Status401Unauthorized)]
         [Authorize(Roles = "Administrator")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Result>> Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
             var category = await _CategoriesServices.Get(id);
-            return category != null ? Ok(category) : NotFound();
+            return category != null ?
+                Ok(new ResultValue<CategoryGetDTO>()
+                {
+                    Value = category,
+                    StatusCode = StatusCodes.Status200OK
+                }) :
+                NotFound(new ResultValue<CategoryGetDTO>()
+                {
+                    HasErrors = true,
+                    Messages = new List<string>() { "No se encuentra la categoria deseada" },
+                    StatusCode = StatusCodes.Status404NotFound
+                });
         }
 
         /// <summary>
