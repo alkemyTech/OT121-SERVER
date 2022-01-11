@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using Test.Helper;
 using Test.Interfaces;
 
-namespace Test.UnitTest.UserControllerTest
+namespace Test.UnitTest.UserTests
 {
     [TestClass]
     public abstract class CommonTest
