@@ -40,7 +40,7 @@ namespace Test.UnitTest.ContactsControllerTest
             var response = await contactsController.Get(id);
 
             // Assert
-            var resp = (ObjectResult)response.Result;
+            var resp = (NotFoundResult)response.Result;
             Assert.AreEqual(expected, resp.StatusCode);
         }
 
