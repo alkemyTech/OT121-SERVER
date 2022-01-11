@@ -142,21 +142,6 @@ namespace Test.UnitTest.ActivitiesControllerTest
             Assert.IsFalse(result);
         }
 
-        private bool UserRol(UserLoginResponseDTO user)
-        {
-            var claims = new[] { new Claim(ClaimTypes.Role, user.Role) };
-
-            var identity = new ClaimsIdentity(claims, "TestAuthType");
-            var claimsPrincipal = new ClaimsPrincipal(identity);
-
-            var contextMock = new Mock<HttpContext>();
-            contextMock.Setup(x => x.User).Returns(claimsPrincipal);
-
-            authController.ControllerContext.HttpContext = contextMock.Object;
-
-            return authController.User.IsInRole("Administrator");
-        }
-
         private void SeedContacts(ApplicationDbContext context)
         {
             var role = new Role
