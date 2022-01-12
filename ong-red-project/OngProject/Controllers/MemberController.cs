@@ -52,12 +52,12 @@ namespace OngProject.Controllers
         public async Task<IActionResult> GetAll([FromQuery][Range(1, int.MaxValue, ErrorMessage = "No se admiten números negativos o igual a 0")] int? page)
         {
 
-            if (User.IsInRole("Administrator"))
+            if (User.IsInRole("Administrator") && !page.HasValue)
             {
                 var resultAdmin = await _memberServices.GetAllAsync();
                 return StatusCode(resultAdmin.StatusCode, resultAdmin);
             }
-            if (!page.HasValue)
+            if (!page.HasValue && User.IsInRole("Standard"))
                 return StatusCode(403, new ResultValue<IActionResult>() { StatusCode = 403, HasErrors = true, Messages = new List<string>() { "Usted no posee permisos sobre este recurso." } });
             
             var result = await _memberServices.GetAllByPaginationAsync((int)page);
