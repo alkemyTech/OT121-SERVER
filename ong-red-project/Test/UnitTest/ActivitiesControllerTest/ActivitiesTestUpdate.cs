@@ -10,9 +10,11 @@ using OngProject.Core.DTOs.ActivitiesDTOs;
 using OngProject.Core.DTOs.UserDTOs;
 using OngProject.Core.Entities;
 using OngProject.Core.Helper.Common;
+using OngProject.Core.Helper.S3;
 using OngProject.Core.Interfaces.IServices;
 using OngProject.Core.Interfaces.IServices.AWS;
 using OngProject.Core.Services;
+using OngProject.Core.Services.AWS;
 using OngProject.Infrastructure.Data;
 using OngProject.Infrastructure.Repositories;
 using OngProject.Infrastructure.Repositories.IRepository;
@@ -40,8 +42,11 @@ namespace Test.UnitTest.ActivitiesControllerTest
 
         private IUserServices _userService;
         private IMailService _mailService;
-        private IImageService _imageServices;
         private IOptions<JWTSettings> _jWTSettings;
+
+        private IImageService _imageServices;
+        private IOptions<AWSSettings> _aWSSettings;
+        private S3AwsHelper _s3AwsHelper;
 
         #endregion
 
@@ -66,6 +71,16 @@ namespace Test.UnitTest.ActivitiesControllerTest
                 Audience = "prueba",
                 DurationInDays = 1
             });
+
+            _aWSSettings = Options.Create(new AWSSettings()
+            {
+                Bucket = ""
+            });
+
+            _s3AwsHelper = new S3AwsHelper(_aWSSettings);
+
+            _imageServices = new ImageService(_aWSSettings);
+
             IUnitOfWork unitOfWork = new UnitOfWork(_context);
 
             _activitiesServices = new ActivitiesServices(unitOfWork, _imageServices);
@@ -99,7 +114,7 @@ namespace Test.UnitTest.ActivitiesControllerTest
                 Id = 1,
                 Name = "Update activity",
                 Content = "Update content",
-                Image = null
+                Image = GetImage()
             };
 
             //Act
