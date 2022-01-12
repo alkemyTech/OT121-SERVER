@@ -123,24 +123,6 @@ namespace Test.UnitTest.ActivitiesControllerTest
             Assert.AreEqual(404, expected.StatusCode );
         }
 
-        [TestMethod]
-        public async Task Get_User_Unauthorized()
-        {
-            //Arrange
-            Cleanup();
-            MakeArrange();
-
-            UserLoginRequestDTO userLogin = new UserLoginRequestDTO();
-            userLogin.Email = "user@example.com";
-            userLogin.Password = "12345";
-            //Act
-            var response = await authController.LoginAsync(userLogin) as ObjectResult;
-            var user = response.Value as UserLoginResponseDTO;
-
-            var result = UserRol(user);
-            // Assert
-            Assert.IsFalse(result);
-        }
 
         private void SeedContacts(ApplicationDbContext context)
         {
